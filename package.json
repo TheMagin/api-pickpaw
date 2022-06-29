@@ -9,7 +9,6 @@
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write ."
   },
-  
   "eslintConfig": {
     "extends": [
       "plugin:adonis/typescriptApp",
@@ -19,6 +18,7 @@
       "prettier"
     ],
     "rules": {
+      "@typescript-eslint/ban-ts-ignore": "on",
       "prettier/prettier": [
         "error"
       ]
