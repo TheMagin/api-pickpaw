@@ -9,7 +9,7 @@
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write ."
   },
-  "engines": {"node": "16.5.0"},
+  
   "eslintConfig": {
     "extends": [
       "plugin:adonis/typescriptApp",
