@@ -1,8 +1,12 @@
 import { DateTime } from 'luxon'
 import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
+import UsersFilter from './Filters/UserFilter'
+import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
+import { compose } from '@ioc:Adonis/Core/Helpers'
 
-export default class Users extends BaseModel {
+export default class Users extends compose(BaseModel, Filterable) {
+  public static $filter = () => UsersFilter
   public serializeExtras = true
 
   @column({ isPrimary: true })

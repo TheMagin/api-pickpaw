@@ -42,7 +42,7 @@ export default class UsersController {
       await Mail.use('sendgrid').send((message) => {
         message
           .from('nicolasalarconsalcedo@gmail.com')
-          .to('nicolasalarconsalcedo@gmail.com')
+          .to(data.email)
           .subject('Confirmación de email')
           .html('Prueba qlo de registro')
       })
@@ -58,6 +58,27 @@ export default class UsersController {
         status: false,
         message: 'No se creo usuario',
         error: error,
+      })
+    }
+  }
+
+  public async index({ request, response }: HttpContextContract) {
+    const { page = 1, limit = 10, ...filters } = request.qs()
+
+    try {
+      const user = await User.filter(filters).paginate(page, limit)
+
+      return response.ok({
+        status: true,
+        message: 'Usuarios listados correctamente',
+        user: user.serialize().data,
+        meta: user.serialize().meta,
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al listar usuarios',
+        error,
       })
     }
   }
