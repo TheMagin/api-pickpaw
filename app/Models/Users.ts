@@ -34,6 +34,9 @@ export default class Users extends compose(BaseModel, Filterable) {
   public photo: string
 
   @column()
+  public phone: string
+
+  @column()
   public name: string
 
   @beforeSave()
