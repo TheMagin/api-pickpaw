@@ -1,7 +1,12 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
+import { compose } from '@ioc:Adonis/Core/Helpers'
+import CommuneFilter from './Filters/CommuneFilter'
 
-export default class Commune extends BaseModel {
+export default class Commune extends compose(BaseModel, Filterable) {
+  public static $filter = () => CommuneFilter
+
   @column({ isPrimary: true })
   public id: number
 

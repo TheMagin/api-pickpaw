@@ -27,6 +27,7 @@ export default class UsersController {
     }
   }
 
+  //Function CREATE Default
   public async store({ request, response }: HttpContextContract) {
     //Call method validate
     const { user: data } = await request.validate({ schema: CreateSchema })
@@ -41,13 +42,12 @@ export default class UsersController {
       await userModel.save()
       await Mail.use('sendgrid').send((message) => {
         message
-          .from('nicolasalarconsalcedo@gmail.com')
+          .from('noreply@pickpaw.cl')
           .to(data.email)
           .subject('Confirmación de email')
-          .html('Prueba qlo de registro')
+          .html('Prueba correo de confirmación')
       })
       //Function for Send mail with sengrid
-
       return response.created({
         status: true,
         message: 'Se creo el usuario',
@@ -62,6 +62,7 @@ export default class UsersController {
     }
   }
 
+  //Function GET Default
   public async index({ request, response }: HttpContextContract) {
     const { page = 1, limit = 10, ...filters } = request.qs()
 

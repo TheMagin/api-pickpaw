@@ -1,7 +1,11 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
+import { compose } from '@ioc:Adonis/Core/Helpers'
+import PetTypeFilter from './Filters/PetTypeFilter'
+export default class PetType extends compose(BaseModel, Filterable) {
+  public static $filter = () => PetTypeFilter
 
-export default class PetType extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 

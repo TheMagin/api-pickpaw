@@ -1,7 +1,12 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { compose } from '@ioc:Adonis/Core/Helpers'
+import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
+import RegionFilter from './Filters/RegionFilter'
 
-export default class Region extends BaseModel {
+export default class Region extends compose(BaseModel, Filterable) {
+  public static $filter = () => RegionFilter
+
   @column({ isPrimary: true })
   public id: number
 

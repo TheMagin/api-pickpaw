@@ -1,7 +1,12 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
+import { compose } from '@ioc:Adonis/Core/Helpers'
+import AddressFilter from './Filters/AddressFilter'
 
-export default class Address extends BaseModel {
+export default class Address extends compose(BaseModel, Filterable) {
+  public static $filter = () => AddressFilter
+
   @column({ isPrimary: true })
   public id: number
 

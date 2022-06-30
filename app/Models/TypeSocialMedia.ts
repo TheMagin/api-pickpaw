@@ -1,7 +1,12 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
+import { compose } from '@ioc:Adonis/Core/Helpers'
+import TypeSocialMediaFilter from './Filters/TypeSocialMediaFilter'
 
-export default class TypeSocialMedia extends BaseModel {
+export default class TypeSocialMedia extends compose(BaseModel, Filterable) {
+  public static $filter = () => TypeSocialMediaFilter
+
   @column({ isPrimary: true })
   public id: number
 
