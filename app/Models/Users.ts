@@ -23,6 +23,15 @@ export default class Users extends BaseModel {
   @column()
   public rolesId: number
 
+  @column()
+  public activate: string
+
+  @column()
+  public photo: string
+
+  @column()
+  public name: string
+
   @beforeSave()
   public static async hashPassword(user: Users) {
     if (user.$dirty.password) {

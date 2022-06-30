@@ -59,6 +59,7 @@
     "@adonisjs/mail": "^8.1.2",
     "@adonisjs/repl": "^3.1.11",
     "@adonisjs/view": "^6.1.5",
+    "adonis-lucid-filter": "^4.1.0",
     "luxon": "^2.4.0",
     "mysql": "^2.18.1",
     "nodemailer-sendgrid": "^1.0.3",
