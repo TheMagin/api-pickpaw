@@ -14,7 +14,7 @@ export default class Commune extends compose(BaseModel, Filterable) {
   public name: string
 
   @column()
-  public region_id: number
+  public region_id?: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

@@ -19,6 +19,10 @@ export default class RoleSeeder extends BaseSeeder {
         id: 4,
         name: 'Veterinario',
       },
+      {
+        id: 5,
+        name: 'Fundación',
+      },
     ])
   }
 }

@@ -14,6 +14,7 @@ export default class UsersSchema extends BaseSchema {
       table.string('photo').nullable()
       table.string('name').nullable()
       table.string('phone').nullable()
+      table.string('last_name').nullable()
 
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL

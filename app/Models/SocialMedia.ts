@@ -14,10 +14,10 @@ export default class SocialMedia extends compose(BaseModel, Filterable) {
   public account: string
 
   @column()
-  public type_social_media_id: number
+  public type_social_media_id?: number
 
   @column()
-  public user_id: number
+  public user_id?: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

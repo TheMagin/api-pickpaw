@@ -13,7 +13,7 @@ export default class PetBreed extends compose(BaseModel, Filterable) {
   public name: string
 
   @column()
-  public pet_type_id: number
+  public pet_type_id?: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

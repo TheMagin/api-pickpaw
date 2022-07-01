@@ -35,7 +35,12 @@ export default class UsersController {
     const userModel = new User()
 
     userModel.email = data.email
+    userModel.activate = data.activate
     userModel.password = data.password
+    userModel.rolesId = data.idRol
+    userModel.phone = data.phone
+    userModel.name = data.name
+    userModel.lastName = data.lastName
 
     try {
       //save user

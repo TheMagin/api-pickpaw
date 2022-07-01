@@ -13,11 +13,11 @@ export default class Address extends compose(BaseModel, Filterable) {
   @column()
   public street: string
 
-  @column()
-  public region_id: number
+  @column({ serializeAs: null })
+  public region_id?: number
 
-  @column()
-  public commune_id: number
+  @column({ serializeAs: null })
+  public commune_id?: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

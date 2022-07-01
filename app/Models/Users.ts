@@ -18,6 +18,9 @@ export default class Users extends compose(BaseModel, Filterable) {
   @column()
   public email: string
 
+  @column()
+  public lasta_name: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
@@ -25,7 +28,7 @@ export default class Users extends compose(BaseModel, Filterable) {
   public updatedAt: DateTime
 
   @column()
-  public rolesId: number
+  public roles_id?: number
 
   @column()
   public activate: string
