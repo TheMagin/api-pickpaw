@@ -31,7 +31,13 @@ export default class RegionsController {
     const { page = 1, limit = 10, ...filters } = request.qs()
 
     try {
-      const region = await Region.filter(filters).preload('comune').paginate(page, limit)
+      const region = await Region.filter(filters)
+        .preload('comune')
+        .orderBy('idRegion', 'desc')
+        .paginate(page, limit)
+      /*const data = await Database.rawQuery(
+        `WITH t(n) AS (SELECT 1 FROM DUAL UNION ALL SELECT n+1 FROM t WHERE n < 12) SELECT  t.n as "mes", (SELECT COUNT(p."id") as "clientes" FROM PROVEEDOR_SISTEMA p WHERE   TO_CHAR(p."created_at", 'MM') = t.n) as "clientes" FROM t`
+      )*/
 
       return response.ok({
         status: true,
