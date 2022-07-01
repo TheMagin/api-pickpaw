@@ -19,7 +19,7 @@ export default class Users extends compose(BaseModel, Filterable) {
   public email: string
 
   @column()
-  public lasta_name: string
+  public last_name: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
