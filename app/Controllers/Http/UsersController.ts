@@ -37,10 +37,10 @@ export default class UsersController {
     userModel.email = data.email
     userModel.activate = data.activate
     userModel.password = data.password
-    userModel.rolesId = data.idRol
+    userModel.roles_id = data.idRol
     userModel.phone = data.phone
     userModel.name = data.name
-    userModel.lastName = data.lastName
+    userModel.last_name = data.lastName
 
     try {
       //save user
