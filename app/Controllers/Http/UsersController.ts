@@ -1,9 +1,9 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Mail from '@ioc:Adonis/Addons/Mail'
 import User from 'App/Models/Users'
-
-import { CreateSchema, LoginSchema } from 'App/Validators/UserValidator'
 import Encryption from '@ioc:Adonis/Core/Encryption'
+import { CreateSchema, LoginSchema } from 'App/Validators/UserValidator'
+
 export default class UsersController {
   public async login({ request, auth, response }: HttpContextContract) {
     //Call method validate
@@ -43,7 +43,7 @@ export default class UsersController {
     userModel.last_name = data.lastName
 
     try {
-      const user = await User.findByOrFail('email', userModel.email)
+      const user = await User.findByOrFail('email', data.email)
       const token = await auth.use('api').generate(user)
       const encrypted = Encryption.encrypt(token.tokenHash)
       //save user
@@ -51,11 +51,11 @@ export default class UsersController {
       await Mail.use('sendgrid').send((message) => {
         message
           .from('noreply@pickpaw.cl')
-          .to(data.email)
+          .to('gabriel.mena.jofre@gmail.com')
           .subject('Confirmación de email')
           .htmlView('email_verify', {
-            name: `${data.email}`,
-            url: `https://dev.pickpaw.cl/register/createProfile?t=${encrypted}`,
+            name: `${user.name} ${user.last_name}`,
+            url: `https://dev.pickpaw.cl/register/createProfile?t=${encrypted}?t2=${user.id}`,
           })
       })
       //Function for Send mail with sengrid
