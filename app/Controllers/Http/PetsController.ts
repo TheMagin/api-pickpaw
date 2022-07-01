@@ -1,16 +1,19 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Pet from 'App/Models/Pet'
-import { CreateSchema } from 'App/Validators/PetValidator'
 
 export default class PetsController {
     public async store({ request, response }: HttpContextContract) {
-        const { pet: data } = await request.validate({ schema: CreateSchema })
+        //const { pet: data } = await request.validate({ schema: CreateSchema })
 
         const petModel = new Pet()
 
-        petModel.name = data.name
+        //petModel.name = data.name
+
+        const name = request.input('name')
 
         try {
+            petModel.name = name
+        
             await petModel.save()
 
             return response.created({
