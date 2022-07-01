@@ -32,7 +32,7 @@ export default class CommunesController {
     const { page = 1, limit = 10, ...filters } = request.qs()
 
     try {
-      const commune = await Commune.filter(filters).paginate(page, limit)
+      const commune = await Commune.filter(filters).preload('region').paginate(page, limit)
 
       return response.ok({
         status: true,
