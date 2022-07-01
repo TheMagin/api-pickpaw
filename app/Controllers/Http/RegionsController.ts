@@ -33,7 +33,7 @@ export default class RegionsController {
     try {
       const region = await Region.filter(filters)
         .preload('comune')
-        .orderBy('idRegion', 'desc')
+
         .paginate(page, limit)
       /*const data = await Database.rawQuery(
         `WITH t(n) AS (SELECT 1 FROM DUAL UNION ALL SELECT n+1 FROM t WHERE n < 12) SELECT  t.n as "mes", (SELECT COUNT(p."id") as "clientes" FROM PROVEEDOR_SISTEMA p WHERE   TO_CHAR(p."created_at", 'MM') = t.n) as "clientes" FROM t`
