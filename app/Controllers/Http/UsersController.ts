@@ -50,7 +50,7 @@ export default class UsersController {
     const userModel = new User()
 
     userModel.email = data.email
-    userModel.activate = data.activate
+    userModel.activate = false
     userModel.password = data.password
     userModel.roles_id = data.idRol
     userModel.phone = data.phone

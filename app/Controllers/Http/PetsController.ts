@@ -11,10 +11,11 @@ export default class PetsController {
 
     const name = request.input('name')
     const age = request.input('age')
+
     const gender = request.input('gender')
     const additional_information = request.input('additional_information')
     const pet_type_id = request.input('pet_type_id')
-    const pet_breed_id = request.input('pet_breed_id')
+    const pet_breed = request.input('pet_breed')
     const user_id = request.input('user_id')
 
     try {
@@ -22,7 +23,7 @@ export default class PetsController {
       petModel.age = age
       petModel.gender = gender
       petModel.additional_information = additional_information
-      petModel.pet_breed_id = pet_breed_id
+      petModel.pet_breed = pet_breed
       petModel.pet_type_id = pet_type_id
       petModel.user_id = user_id
 
