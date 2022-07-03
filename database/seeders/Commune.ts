@@ -3,7 +3,7 @@ import Commune from 'App/Models/Commune'
 
 export default class extends BaseSeeder {
   public async run() {
-    await Commune.updateOrCreateMany('id', [
+    await Commune.createMany([
       {
         name: 'Algarrobo',
         region_id: 5,
@@ -14,7 +14,6 @@ export default class extends BaseSeeder {
       },
       {
         name: 'Alto Biobío',
-
         region_id: 8,
       },
       {
@@ -1495,7 +1494,7 @@ export default class extends BaseSeeder {
       {
         name: 'San Pedro de Atacama',
 
-        region_id: 0,
+        region_id: 2,
       },
       {
         name: 'San Pedro de la Paz',

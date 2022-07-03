@@ -10,6 +10,8 @@ export default class extends BaseSeeder {
       },
       {
         id: 1,
+
+        name: 'Tarapacá',
       },
       {
         id: 2,
