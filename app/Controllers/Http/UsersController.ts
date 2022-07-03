@@ -48,14 +48,15 @@ export default class UsersController {
       const encrypted = Encryption.encrypt(token.tokenHash)
       //save user
       await userModel.save()
+
       await Mail.use('sendgrid').send((message) => {
         message
           .from('noreply@pickpaw.cl')
-          .to('gabriel.mena.jofre@gmail.com')
+          .to(data.email)
           .subject('Confirmación de email')
           .htmlView('email_verify', {
             name: `${user.name} ${user.last_name}`,
-            url: `https://dev.pickpaw.cl/register/createProfile?t=${encrypted}?t2=${user.id}`,
+            url: `https://dev.pickpaw.cl/register/createProfile?t=${encrypted}&t2=${user.id}`,
           })
       })
       //Function for Send mail with sengrid

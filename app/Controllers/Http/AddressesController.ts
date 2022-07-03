@@ -11,7 +11,7 @@ export default class AddressesController {
     addressModel.street = data.street
     addressModel.region_id = data.idRegion
     addressModel.commune_id = data.idComuna
-
+    addressModel.user_id = data.idUser
     try {
       await addressModel.save()
 

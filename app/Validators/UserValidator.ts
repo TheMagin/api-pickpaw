@@ -12,7 +12,7 @@ export const CreateSchema = schema.create({
     email: schema.string({ trim: true }, [rules.required(), rules.maxLength(255)]),
     lastName: schema.string({ trim: true }, [rules.required(), rules.maxLength(255)]),
     password: schema.string({ trim: true }, [rules.required(), rules.maxLength(255)]),
-    activate: schema.string({ trim: true }, [rules.required(), rules.maxLength(255)]),
+    activate: schema.boolean(),
     photo: schema.string({ trim: true }, [rules.required(), rules.maxLength(255)]),
     name: schema.string({ trim: true }, [rules.required()]),
     phone: schema.string({ trim: true }, [rules.required()]),

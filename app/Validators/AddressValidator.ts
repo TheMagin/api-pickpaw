@@ -5,5 +5,6 @@ export const CreateSchema = schema.create({
     street: schema.string({ trim: true }, [rules.required(), rules.maxLength(255)]),
     idRegion: schema.number.optional(),
     idComuna: schema.number.optional([rules.unsigned()]),
+    idUser: schema.number.optional([rules.unsigned()]),
   }),
 })

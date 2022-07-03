@@ -31,7 +31,7 @@ export default class Users extends compose(BaseModel, Filterable) {
   public roles_id?: number
 
   @column()
-  public activate: string
+  public activate: boolean
 
   @column()
   public photo: string

@@ -19,6 +19,9 @@ export default class Address extends compose(BaseModel, Filterable) {
   @column({ serializeAs: null })
   public commune_id?: number
 
+  @column({ serializeAs: null })
+  public user_id?: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
