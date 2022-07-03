@@ -32,21 +32,14 @@ Route.get('health', async ({ response }) => {
 })
 
 Route.post('/auth', 'UsersController.login')
-
+Route.post('/logout', 'UsersController.logout')
 Route.resource('/user', 'UsersController')
-
+Route.post('/new-password-token', 'UsersController.createNewPasswordToken')
 Route.resource('/region', 'RegionsController')
-
 Route.resource('/commune', 'CommunesController')
-
 Route.resource('/address', 'AddressesController')
-
 Route.resource('/pet/breed', 'PetBreedsController')
-
 Route.resource('/pet/type', 'PetTypesController')
-
 Route.resource('/pet', 'PetsController')
-
 Route.resource('/social/media', 'SocialMediasController')
-
 Route.resource('/type/social/media', 'TypeSocialMediasController')

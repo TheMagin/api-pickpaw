@@ -2,7 +2,8 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Mail from '@ioc:Adonis/Addons/Mail'
 import User from 'App/Models/Users'
 import Encryption from '@ioc:Adonis/Core/Encryption'
-import { CreateSchema, LoginSchema } from 'App/Validators/UserValidator'
+import { CreateSchema, LoginSchema, createPasswordTokenSchema } from 'App/Validators/UserValidator'
+import Database from '@ioc:Adonis/Lucid/Database'
 
 export default class UsersController {
   public async login({ request, auth, response }: HttpContextContract) {
@@ -22,6 +23,20 @@ export default class UsersController {
       return response.badRequest({
         status: false,
         message: 'Credenciales incorrectas',
+        error: error,
+      })
+    }
+  }
+
+  public async logout({ auth, response }: HttpContextContract) {
+    try {
+      await auth.use('api').revoke()
+
+      return response.ok({ status: true, message: 'Ha cerrado sesión correctamente' })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al cerrar sesión, por favor intentelo nuevamente.',
         error: error,
       })
     }
@@ -93,6 +108,39 @@ export default class UsersController {
         message: 'Error al listar usuarios',
         error,
       })
+    }
+  }
+
+  public async createNewPasswordToken({ request, response }: HttpContextContract) {
+    const { passwordNew, token } = await request.validate({
+      schema: createPasswordTokenSchema,
+    })
+
+    try {
+      const decodedToken: string | null = Encryption.decrypt(token)
+
+      if (decodedToken) {
+        const isValidToken = await Database.query()
+          .from('API_TOKENS')
+          .select('token', 'user_id')
+          .where('token', decodedToken)
+
+        if (!isValidToken.length) throw new Error('')
+
+        const usuario = await User.findByOrFail('id', isValidToken?.[0].user_id)
+
+        usuario.password = passwordNew
+
+        await usuario.save()
+
+        await Database.query().from('API_TOKENS').where('token', decodedToken).delete()
+      } else {
+        throw new Error('')
+      }
+
+      return response.ok({ status: true })
+    } catch (error) {
+      return response.badRequest({ status: false })
     }
   }
 }

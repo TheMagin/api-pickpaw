@@ -19,3 +19,13 @@ export const CreateSchema = schema.create({
     idRol: schema.number.optional([rules.unsigned()]),
   }),
 })
+
+export const createPasswordTokenSchema = schema.create({
+  passwordNew: schema.string({ trim: true }, [
+    rules.required(),
+    rules.minLength(6),
+    rules.confirmed('passwordConfirmation'),
+  ]),
+  passwordConfirmation: schema.string({ trim: true }, [rules.required(), rules.minLength(6)]),
+  token: schema.string({ trim: true }, [rules.required()]),
+})
