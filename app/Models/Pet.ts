@@ -26,7 +26,7 @@ export default class Pet extends compose(BaseModel, Filterable) {
   public additional_information: string
 
   @column()
-  public pet_breed_id: number
+  public pet_breed: number
 
   @column()
   public pet_type_id: number
