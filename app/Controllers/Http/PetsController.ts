@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Pet from 'App/Models/Pet'
+import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 
 export default class PetsController {
   public async store({ request, response }: HttpContextContract) {
@@ -11,7 +12,7 @@ export default class PetsController {
 
     const name = request.input('name')
     const age = request.input('age')
-
+    const photo = request.file('photo')!
     const gender = request.input('gender')
     const additional_information = request.input('additional_information')
     const pet_type_id = request.input('pet_type_id')
@@ -19,6 +20,7 @@ export default class PetsController {
     const user_id = request.input('user_id')
 
     try {
+      petModel.photo = await Attachment.fromFile(photo)
       petModel.name = name
       petModel.age = age
       petModel.gender = gender

@@ -3,7 +3,7 @@ import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import PetFilter from './Filters/PetFilter'
-
+import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 export default class Pet extends compose(BaseModel, Filterable) {
   public static $filter = () => PetFilter
 
@@ -13,8 +13,8 @@ export default class Pet extends compose(BaseModel, Filterable) {
   @column()
   public name: string
 
-  @column()
-  public photo: string
+  @attachment({ disk: 's3', preComputeUrl: true })
+  public photo: AttachmentContract
 
   @column()
   public age: number

@@ -4,6 +4,7 @@ import User from 'App/Models/Users'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 import { CreateSchema, LoginSchema, createPasswordTokenSchema } from 'App/Validators/UserValidator'
 import Database from '@ioc:Adonis/Lucid/Database'
+import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 
 export default class UsersController {
   public async login({ request, auth, response }: HttpContextContract) {
@@ -58,16 +59,17 @@ export default class UsersController {
     userModel.last_name = data.lastName
 
     try {
+      await userModel.save()
+
       const user = await User.findByOrFail('email', data.email)
       const token = await auth.use('api').generate(user)
       const encrypted = Encryption.encrypt(token.tokenHash)
       //save user
-      await userModel.save()
 
       await Mail.use('sendgrid').send((message) => {
         message
           .from('noreply@pickpaw.cl')
-          .to(data.email)
+          .to(user.email)
           .subject('Confirmación de email')
           .htmlView('email_verify', {
             name: `${user.name} ${user.last_name}`,
@@ -112,7 +114,7 @@ export default class UsersController {
   }
 
   public async crateUserToken({ request, response }: HttpContextContract) {
-    const photo = request.input('photo')
+    const photo = request.file('photo')!
     const phone = request.input('phone')
     const token = request.input('token')
 
@@ -129,7 +131,8 @@ export default class UsersController {
 
         const usuario = await User.findByOrFail('id', isValidToken?.[0].user_id)
 
-        usuario.photo = photo
+        usuario.photo = await Attachment.fromFile(photo)
+
         usuario.phone = phone
 
         await usuario.save()

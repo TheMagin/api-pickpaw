@@ -4,7 +4,7 @@ import Hash from '@ioc:Adonis/Core/Hash'
 import UsersFilter from './Filters/UserFilter'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { compose } from '@ioc:Adonis/Core/Helpers'
-
+import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 export default class Users extends compose(BaseModel, Filterable) {
   public static $filter = () => UsersFilter
   public serializeExtras = true
@@ -33,8 +33,8 @@ export default class Users extends compose(BaseModel, Filterable) {
   @column()
   public activate?: boolean
 
-  @column()
-  public photo?: string
+  @attachment({ disk: 's3', preComputeUrl: true })
+  public photo?: AttachmentContract
 
   @column()
   public phone?: string
