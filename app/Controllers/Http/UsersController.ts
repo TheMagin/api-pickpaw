@@ -14,12 +14,19 @@ export default class UsersController {
     try {
       const token = await auth.attempt(user.email, user.password)
       //const usuario = await auth.authenticate()
-
-      return response.created({
-        status: true,
-        message: 'Inició sesión correctamente',
-        token,
-      })
+      const usuario = await auth.authenticate()
+      if (usuario.activate === false) {
+        return response.badRequest({
+          status: false,
+          message: 'Necesita actualizar datos',
+        })
+      } else {
+        return response.created({
+          status: true,
+          message: 'Inició sesión correctamente',
+          token,
+        })
+      }
     } catch (error) {
       return response.badRequest({
         status: false,
@@ -51,7 +58,7 @@ export default class UsersController {
     const userModel = new User()
 
     userModel.email = data.email
-    userModel.activate = false
+    userModel.activate = true
     userModel.password = data.password
     userModel.roles_id = data.idRol
     userModel.phone = data.phone
