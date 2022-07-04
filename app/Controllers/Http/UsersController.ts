@@ -111,6 +111,40 @@ export default class UsersController {
     }
   }
 
+  public async crateUserToken({ request, response }: HttpContextContract) {
+    const photo = request.input('photo')
+    const phone = request.input('phone')
+    const token = request.input('token')
+
+    try {
+      const decodedToken: string | null = Encryption.decrypt(token)
+
+      if (decodedToken) {
+        const isValidToken = await Database.query()
+          .from('api_tokens')
+          .select('token', 'user_id')
+          .where('token', decodedToken)
+
+        if (!isValidToken.length) throw new Error('')
+
+        const usuario = await User.findByOrFail('id', isValidToken?.[0].user_id)
+
+        usuario.photo = photo
+        usuario.phone = phone
+
+        await usuario.save()
+
+        await Database.query().from('api_tokens').where('token', decodedToken).delete()
+      } else {
+        throw new Error('')
+      }
+
+      return response.ok({ status: true })
+    } catch (error) {
+      return response.badRequest({ status: false })
+    }
+  }
+
   public async createNewPasswordToken({ request, response }: HttpContextContract) {
     const { passwordNew, token } = await request.validate({
       schema: createPasswordTokenSchema,
@@ -121,7 +155,7 @@ export default class UsersController {
 
       if (decodedToken) {
         const isValidToken = await Database.query()
-          .from('API_TOKENS')
+          .from('api_tokens')
           .select('token', 'user_id')
           .where('token', decodedToken)
 
@@ -133,7 +167,7 @@ export default class UsersController {
 
         await usuario.save()
 
-        await Database.query().from('API_TOKENS').where('token', decodedToken).delete()
+        await Database.query().from('api_tokens').where('token', decodedToken).delete()
       } else {
         throw new Error('')
       }

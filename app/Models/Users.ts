@@ -19,7 +19,7 @@ export default class Users extends compose(BaseModel, Filterable) {
   public email: string
 
   @column()
-  public last_name: string
+  public last_name?: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -31,16 +31,16 @@ export default class Users extends compose(BaseModel, Filterable) {
   public roles_id?: number
 
   @column()
-  public activate: boolean
+  public activate?: boolean
 
   @column()
-  public photo: string
+  public photo?: string
 
   @column()
-  public phone: string
+  public phone?: string
 
   @column()
-  public name: string
+  public name?: string
 
   @beforeSave()
   public static async hashPassword(user: Users) {
