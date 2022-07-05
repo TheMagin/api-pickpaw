@@ -5,3 +5,9 @@ export const CreateSchema = schema.create({
     name: schema.string({ trim: true }, [rules.required(), rules.maxLength(255)]),
   }),
 })
+
+export const UpdateCreateSchema = schema.create({
+  pet: schema.object().members({
+    name: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
+  }),
+})

@@ -20,6 +20,18 @@ export const CreateSchema = schema.create({
   }),
 })
 
+export const UpdateCreateSchema = schema.create({
+  user: schema.object().members({
+    email: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
+    lastName: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
+    password: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
+    photo: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
+    name: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
+    phone: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
+    idRol: schema.number.optional([rules.unsigned()]),
+  }),
+})
+
 export const createPasswordTokenSchema = schema.create({
   passwordNew: schema.string({ trim: true }, [
     rules.required(),
