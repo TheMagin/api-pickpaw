@@ -30,17 +30,34 @@ Route.get('health', async ({ response }) => {
 
   return report.healthy ? response.ok(report) : response.badRequest(report)
 })
-
+//Route users
 Route.post('/auth', 'UsersController.login')
 Route.post('/logout', 'UsersController.logout')
-Route.resource('/user', 'UsersController')
+Route.resource('/user', 'UsersController').where('id', Route.matchers.number()).apiOnly()
 Route.post('/new-password-token', 'UsersController.createNewPasswordToken')
 Route.post('/new-user-token', 'UsersController.crateUserToken')
+Route.put('/user/image/:id', 'UsersController.updateImagen')
+
+//Route region
 Route.resource('/region', 'RegionsController')
+
+//Route comuna
 Route.resource('/commune', 'CommunesController')
+
+//Route address
 Route.resource('/address', 'AddressesController')
+
+//Route petbredd
 Route.resource('/pet/breed', 'PetBreedsController')
+
+//Route pet type
 Route.resource('/pet/type', 'PetTypesController')
+
+//Route pet
 Route.resource('/pet', 'PetsController')
+
+//Route social media
 Route.resource('/social/media', 'SocialMediasController')
+
+//Route type social media
 Route.resource('/type/social/media', 'TypeSocialMediasController')

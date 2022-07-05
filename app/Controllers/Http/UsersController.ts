@@ -2,7 +2,12 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Mail from '@ioc:Adonis/Addons/Mail'
 import User from 'App/Models/Users'
 import Encryption from '@ioc:Adonis/Core/Encryption'
-import { CreateSchema, LoginSchema, createPasswordTokenSchema } from 'App/Validators/UserValidator'
+import {
+  CreateSchema,
+  LoginSchema,
+  createPasswordTokenSchema,
+  UpdateCreateSchema,
+} from 'App/Validators/UserValidator'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 
@@ -98,6 +103,25 @@ export default class UsersController {
     }
   }
 
+  //Function GET id
+  public async show({ params, response, auth }: HttpContextContract) {
+    try {
+      const user = await User.findOrFail(params.id === 0 ? auth.user?.id : params?.id)
+
+      return response.ok({
+        status: true,
+        message: 'Usuario encontrado correctamente',
+        user: user.serialize(),
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al obtener usuario',
+        error,
+      })
+    }
+  }
+
   //Function GET Default
   public async index({ request, response }: HttpContextContract) {
     const { page = 1, limit = 10, ...filters } = request.qs()
@@ -115,6 +139,78 @@ export default class UsersController {
       return response.badRequest({
         status: false,
         message: 'Error al listar usuarios',
+        error,
+      })
+    }
+  }
+
+  //Function Update Default
+  public async update({ request, params, response, auth }: HttpContextContract) {
+    const { user: data } = await request.validate({ schema: UpdateCreateSchema })
+
+    const users = await User.findOrFail(params?.id === 0 ? auth.user?.id : params.id)
+
+    users.email = data.email ?? users.email
+    users.phone = data.phone ?? users.phone
+    users.name = data.name ?? users.name
+    users.last_name = data.lastName ?? users.last_name
+
+    try {
+      await users.save()
+
+      return response.ok({
+        status: true,
+        message: 'Usuario actualizado correctamente',
+        users: users.serialize(),
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al actualizar usuario',
+        error,
+      })
+    }
+  }
+
+  //Function DELETE Default
+  public async destroy({ params, response }: HttpContextContract) {
+    const user = await User.findOrFail(params.id)
+
+    try {
+      await user.delete()
+
+      return response.ok({
+        status: true,
+        message: 'Usuario eliminado correctamente ',
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al eliminar usuario',
+        error,
+      })
+    }
+  }
+
+  //Function Update image
+  public async updateImagen({ request, response, params }: HttpContextContract) {
+    const user = await User.findOrFail(params?.id)
+    const photo = request.file('photo', { size: '2mb', extnames: ['jpg', 'png', 'webp'] })
+
+    user.photo = Attachment.fromFile(photo!)
+
+    try {
+      await user.save()
+
+      return response.ok({
+        status: true,
+        message: 'Imagen de usuario actualizada correctamente',
+        usuario: user.serialize(),
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al actualizar imagen de usuario',
         error,
       })
     }
