@@ -216,6 +216,7 @@ export default class UsersController {
     }
   }
 
+  //Function update with token
   public async crateUserToken({ request, response }: HttpContextContract) {
     const photo = request.file('photo')!
     const phone = request.input('phone')
@@ -251,6 +252,7 @@ export default class UsersController {
     }
   }
 
+  //Function update password with token
   public async createNewPasswordToken({ request, response }: HttpContextContract) {
     const { passwordNew, token } = await request.validate({
       schema: createPasswordTokenSchema,
