@@ -25,13 +25,12 @@ export default class UsersController {
           status: false,
           message: 'Necesita actualizar datos',
         })
-      } else {
-        return response.created({
-          status: true,
-          message: 'Inició sesión correctamente',
-          token,
-        })
       }
+      return response.created({
+        status: true,
+        message: 'Inició sesión correctamente',
+        token,
+      })
     } catch (error) {
       return response.badRequest({
         status: false,
