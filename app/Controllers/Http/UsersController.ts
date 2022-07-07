@@ -17,7 +17,7 @@ export default class UsersController {
     const { user } = await request.validate({ schema: LoginSchema })
     try {
       const token = await auth.attempt(user.email, user.password)
-      const usuario = await auth.authenticate()
+      //const usuario = await auth.authenticate()
 
       return response.created({
         status: true,
