@@ -14,17 +14,24 @@ import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 export default class UsersController {
   public async login({ request, auth, response }: HttpContextContract) {
     //Call method validate
-    const { user } = await request.validate({ schema: LoginSchema })
 
     try {
-      const token = await auth.attempt(user.email, user.password)
-      //const usuario = await auth.authenticate()
+      const { user } = await request.validate({ schema: LoginSchema })
+      const usuario = await auth.authenticate()
+      if (usuario.activate === true) {
+        return response.badRequest({
+          status: false,
+          message: 'Debe registrarse',
+        })
+        const token = await auth.attempt(user.email, user.password)
+        //const usuario = await auth.authenticate()
 
-      return response.created({
-        status: true,
-        message: 'Inició sesión correctamente',
-        token,
-      })
+        return response.created({
+          status: true,
+          message: 'Inició sesión correctamente',
+          token,
+        })
+      }
     } catch (error) {
       return response.badRequest({
         status: false,
