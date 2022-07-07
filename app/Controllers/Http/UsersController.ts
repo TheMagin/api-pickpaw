@@ -80,7 +80,7 @@ export default class UsersController {
 
       await Mail.use('sendgrid').send((message) => {
         message
-          .from('noreply@pickpaw.cl', 'Mr foo')
+          .from('noreply@pickpaw.cl', 'PickPaw')
           .to(user.email)
           .subject('Confirmación de email')
           .htmlView('email_verify', {
