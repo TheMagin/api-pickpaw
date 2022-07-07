@@ -19,13 +19,7 @@ export default class UsersController {
     try {
       const token = await auth.attempt(user.email, user.password)
       //const usuario = await auth.authenticate()
-      const usuario = await auth.authenticate()
-      if (usuario.activate === false) {
-        return response.badRequest({
-          status: false,
-          message: 'Necesita actualizar datos',
-        })
-      }
+
       return response.created({
         status: true,
         message: 'Inició sesión correctamente',
