@@ -17,12 +17,13 @@ export default class UsersController {
     const { user } = await request.validate({ schema: LoginSchema })
     try {
       const token = await auth.attempt(user.email, user.password)
-      const users_a = await auth.authenticate()
 
-      if (users_a.activate === true) {
+      const user_a = await User.findByOrFail('email', user.email)
+
+      if (user_a.activate == false) {
         return response.badRequest({
           status: false,
-          message: 'funciono',
+          message: 'Debe verificar su cuenta',
         })
       }
 
@@ -79,7 +80,7 @@ export default class UsersController {
 
       await Mail.use('sendgrid').send((message) => {
         message
-          .from('noreply@pickpaw.cl')
+          .from('noreply@pickpaw.cl', 'Mr foo')
           .to(user.email)
           .subject('Confirmación de email')
           .htmlView('email_verify', {
