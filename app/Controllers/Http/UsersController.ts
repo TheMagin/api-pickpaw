@@ -17,7 +17,14 @@ export default class UsersController {
     const { user } = await request.validate({ schema: LoginSchema })
     try {
       const token = await auth.attempt(user.email, user.password)
-      //const usuario = await auth.authenticate()
+      const users_a = await auth.authenticate()
+
+      if (users_a.activate === true) {
+        return response.badRequest({
+          status: false,
+          message: 'funciono',
+        })
+      }
 
       return response.created({
         status: true,
