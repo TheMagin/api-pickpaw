@@ -9,25 +9,25 @@ export default class Post extends BaseModel {
   public title: string
 
   @column()
-  public description: string
+  public description?: string
 
   @column()
-  public date_expire: string
+  public date_expire?: string
 
   @column()
-  public status: string
+  public status?: string
 
   @column()
-  public post_state: boolean
+  public post_state?: boolean
 
   @column()
-  public user_id: number
+  public user_id?: number
 
   @column()
-  public pet_id: number
+  public pet_id?: number
 
   @column()
-  public type_post_id: number
+  public type_post_id?: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
