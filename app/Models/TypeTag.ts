@@ -1,7 +1,13 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { compose } from '@ioc:Adonis/Core/Helpers'
+import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
+import TypeTagFilter from './Filters/TypeTagFilter'
 
-export default class TypeTag extends BaseModel {
+export default class TypeTag extends compose(BaseModel, Filterable) {
+  public static $filter = () => TypeTagFilter
+  public serializeExtras = true
+
   @column({ isPrimary: true })
   public id: number
 

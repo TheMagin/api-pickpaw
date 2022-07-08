@@ -91,13 +91,13 @@ export default class UsersController {
       //Function for Send mail with sengrid
       return response.created({
         status: true,
-        message: 'Se creo el usuario',
+        message: 'Se creo el Usuario',
         user: userModel.serialize(),
       })
     } catch (error) {
       return response.badRequest({
         status: false,
-        message: 'No se creo usuario',
+        message: 'No se creo Usuario',
         error: error,
       })
     }
@@ -116,7 +116,7 @@ export default class UsersController {
     } catch (error) {
       return response.badRequest({
         status: false,
-        message: 'Error al obtener usuario',
+        message: 'Error al obtener Usuario',
         error,
       })
     }
@@ -138,7 +138,7 @@ export default class UsersController {
     } catch (error) {
       return response.badRequest({
         status: false,
-        message: 'Error al listar usuarios',
+        message: 'Error al listar Usuario',
         error,
       })
     }
@@ -166,7 +166,7 @@ export default class UsersController {
     } catch (error) {
       return response.badRequest({
         status: false,
-        message: 'Error al actualizar usuario',
+        message: 'Error al actualizar Usuario',
         error,
       })
     }
@@ -174,7 +174,7 @@ export default class UsersController {
 
   //Function DELETE Default
   public async destroy({ params, response }: HttpContextContract) {
-    const user = await User.findOrFail(params.id)
+    const user = await User.findOrFail(params?.id)
 
     try {
       await user.delete()
@@ -186,7 +186,7 @@ export default class UsersController {
     } catch (error) {
       return response.badRequest({
         status: false,
-        message: 'Error al eliminar usuario',
+        message: 'Error al eliminar Usuario',
         error,
       })
     }
@@ -204,13 +204,13 @@ export default class UsersController {
 
       return response.ok({
         status: true,
-        message: 'Imagen de usuario actualizada correctamente',
+        message: 'Imagen de Usuario actualizada correctamente',
         usuario: user.serialize(),
       })
     } catch (error) {
       return response.badRequest({
         status: false,
-        message: 'Error al actualizar imagen de usuario',
+        message: 'Error al actualizar imagen de Usuario',
         error,
       })
     }

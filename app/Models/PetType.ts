@@ -5,6 +5,7 @@ import { compose } from '@ioc:Adonis/Core/Helpers'
 import PetTypeFilter from './Filters/PetTypeFilter'
 export default class PetType extends compose(BaseModel, Filterable) {
   public static $filter = () => PetTypeFilter
+  public serializeExtras = true
 
   @column({ isPrimary: true })
   public id: number

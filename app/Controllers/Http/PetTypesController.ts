@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import PetType from 'App/Models/PetType'
-import { CreateSchema } from 'App/Validators/PetTypeValidator'
+import { CreateSchema, UpdateCreateSchema } from 'App/Validators/PetTypeValidator'
 
 export default class PetTypesController {
   public async store({ request, response }: HttpContextContract) {
@@ -44,6 +44,67 @@ export default class PetTypesController {
         status: false,
         message: 'Error al listar Tipos de Mascotas',
         error: error,
+      })
+    }
+  }
+
+  public async update({ request, params, response }: HttpContextContract) {
+    const { petType: data } = await request.validate({ schema: UpdateCreateSchema })
+
+    const petTypeModel = await PetType.findOrFail(params?.id)
+
+    petTypeModel.name = data.name ?? petTypeModel.name
+
+    try {
+      await petTypeModel.save()
+
+      return response.ok({
+        status: true,
+        message: 'Tipo de Mascota actualizado correctamente',
+        petTypeModel: petTypeModel.serialize(),
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al actualizar Tipo de Mascota',
+        error,
+      })
+    }
+  }
+
+  public async show({ params, response }: HttpContextContract) {
+    try {
+      const petType = await PetType.findOrFail(params?.id)
+
+      return response.ok({
+        status: true,
+        message: 'Tipo de Mascota encontrado correctamente',
+        petType: petType.serialize(),
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al obtener Tipo de Mascota',
+        error,
+      })
+    }
+  }
+
+  public async destroy({ params, response }: HttpContextContract) {
+    const petType = await PetType.findOrFail(params?.id)
+
+    try {
+      await petType.delete()
+
+      return response.ok({
+        status: true,
+        message: 'Tipo de Mascota eliminado correctamente ',
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al eliminar Tipo de Mascota',
+        error,
       })
     }
   }

@@ -6,6 +6,7 @@ import AddressFilter from './Filters/AddressFilter'
 
 export default class Address extends compose(BaseModel, Filterable) {
   public static $filter = () => AddressFilter
+  public serializeExtras = true
 
   @column({ isPrimary: true })
   public id: number

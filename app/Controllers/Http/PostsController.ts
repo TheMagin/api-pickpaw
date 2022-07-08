@@ -34,10 +34,31 @@ export default class PostsController {
     }
   }
 
+  public async index({ request, response }: HttpContextContract) {
+    const { page = 1, limit = 10, ...filters } = request.qs()
+
+    try {
+      const post = await Post.filter(filters).paginate(page, limit)
+
+      return response.ok({
+        status: true,
+        message: 'Pots listados correctamente',
+        post: post.serialize().data,
+        meta: post.serialize().meta,
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al listar los Posts',
+        error: error,
+      })
+    }
+  }
+
   public async update({ request, params, response }: HttpContextContract) {
     const { post: data } = await request.validate({ schema: UpdateCreateSchema })
 
-    const postModel = await Post.findOrFail(params.id)
+    const postModel = await Post.findOrFail(params?.id)
 
     postModel.title = data.title ?? postModel.title
     postModel.description = data.description ?? postModel.description
@@ -84,19 +105,19 @@ export default class PostsController {
   }
 
   public async destroy({ params, response }: HttpContextContract) {
-    const post = await Post.findOrFail(params.id)
+    const post = await Post.findOrFail(params?.id)
 
     try {
       await post.delete()
 
       return response.ok({
         status: true,
-        message: 'Eliminado correctamente ',
+        message: 'Post eliminado correctamente ',
       })
     } catch (error) {
       return response.badRequest({
         status: false,
-        message: 'Error al eliminar ',
+        message: 'Error al eliminar Post',
         error,
       })
     }

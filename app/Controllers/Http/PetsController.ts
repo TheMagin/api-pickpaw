@@ -1,14 +1,11 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Pet from 'App/Models/Pet'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
+import { UpdateCreateSchema } from 'App/Validators/PetValidator'
 
 export default class PetsController {
   public async store({ request, response }: HttpContextContract) {
-    //const { pet: data } = await request.validate({ schema: CreateSchema })
-
     const petModel = new Pet()
-
-    //petModel.name = data.name
 
     const name = request.input('name')
     const age = request.input('age')
@@ -62,6 +59,96 @@ export default class PetsController {
         status: false,
         message: 'Error al listar las Mascotas',
         error: error,
+      })
+    }
+  }
+
+  public async update({ request, params, response }: HttpContextContract) {
+    const { pet: data } = await request.validate({ schema: UpdateCreateSchema })
+
+    const petModel = await Pet.findOrFail(params?.id)
+
+    petModel.name = data.name ?? petModel.name
+    petModel.age = data.age ?? petModel.age
+    petModel.gender = data.gender ?? petModel.gender
+    petModel.additional_information = data?.additionInformation ?? petModel.additional_information
+    petModel.pet_breed = petModel.pet_breed ?? petModel.pet_breed
+    petModel.pet_type_id = petModel.pet_type_id ?? petModel.pet_type_id
+    petModel.pet_type_id = petModel.pet_type_id ?? petModel.pet_type_id
+
+    try {
+      await petModel.save()
+
+      return response.ok({
+        status: true,
+        message: 'Mascota actualizada correctamente',
+        petModel: petModel.serialize(),
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al actualizar MAscota',
+        error,
+      })
+    }
+  }
+
+  public async updateImagen({ request, response, params }: HttpContextContract) {
+    const pet = await Pet.findOrFail(params?.id)
+    const photo = request.file('photo', { size: '2mb', extnames: ['jpg', 'png', 'webp'] })
+
+    pet.photo = Attachment.fromFile(photo!)
+
+    try {
+      await pet.save()
+
+      return response.ok({
+        status: true,
+        message: 'Imagen de la Mascota actualizada correctamente',
+        usuario: pet.serialize(),
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al actualizar imagen de la Mascota',
+        error,
+      })
+    }
+  }
+
+  public async show({ params, response }: HttpContextContract) {
+    try {
+      const pet = await Pet.findOrFail(params?.id)
+
+      return response.ok({
+        status: true,
+        message: 'Mascota encontrada correctamente',
+        pet: pet.serialize(),
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al obtener Mascota',
+        error,
+      })
+    }
+  }
+
+  public async destroy({ params, response }: HttpContextContract) {
+    const pet = await Pet.findOrFail(params?.id)
+
+    try {
+      await pet.delete()
+
+      return response.ok({
+        status: true,
+        message: 'Mascota eliminada correctamente ',
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al eliminar Mascota',
+        error,
       })
     }
   }
