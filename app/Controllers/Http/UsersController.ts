@@ -73,7 +73,7 @@ export default class UsersController {
     try {
       await userModel.save()
 
-      const user = await User.findByOrFail('email', data.email)
+      const user = await User.findByOrFail('email', userModel.email)
       const token = await auth.use('api').generate(user)
       const encrypted = Encryption.encrypt(token.tokenHash)
       //save user
@@ -84,7 +84,7 @@ export default class UsersController {
           .to(user.email)
           .subject('Confirmación de email')
           .htmlView('email_verify', {
-            name: `${user.name} ${user.last_name}`,
+            name: `${data.name} "${data.lastName}`,
             url: `https://dev.pickpaw.cl/register/createProfile?t=${encrypted}&t2=${user.id}`,
           })
       })
