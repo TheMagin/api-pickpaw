@@ -84,7 +84,7 @@ export default class UsersController {
           .to(user.email)
           .subject('Confirmación de email')
           .htmlView('email_verify', {
-            name: `${data.name} "${data.lastName}`,
+            name: `${user.name} "${user.last_name}`,
             url: `https://dev.pickpaw.cl/register/createProfile?t=${encrypted}&t2=${user.id}`,
           })
       })

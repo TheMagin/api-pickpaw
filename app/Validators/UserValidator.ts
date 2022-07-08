@@ -9,7 +9,10 @@ export const LoginSchema = schema.create({
 
 export const CreateSchema = schema.create({
   user: schema.object().members({
-    email: schema.string({ trim: true }, [rules.required(), rules.maxLength(255)]),
+    email: schema.string({ trim: true }, [
+      rules.email(),
+      rules.unique({ table: 'users', column: 'email' }),
+    ]),
     lastName: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
     password: schema.string({ trim: true }, [rules.required(), rules.maxLength(255)]),
 
