@@ -63,4 +63,13 @@ Route.resource('/social/media', 'SocialMediasController')
 Route.resource('/type/social/media', 'TypeSocialMediasController')
 
 //Route post
+Route.resource('/role', 'RolesController')
+
+//Route post
+Route.resource('/type/tag', 'TypeTagsController')
+
+//Route post
+Route.resource('/tag', 'TagsController')
+
+//Route post
 Route.resource('/post', 'PostsController')

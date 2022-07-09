@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Commune from 'App/Models/Commune'
-import { CreateSchema } from 'App/Validators/CommuneValidator'
+import { CreateSchema, UpdateCreateSchema } from 'App/Validators/CommuneValidator'
 
 export default class CommunesController {
   public async store({ request, response }: HttpContextContract) {
@@ -45,6 +45,68 @@ export default class CommunesController {
         status: false,
         message: 'Error al listar comunas',
         error: error,
+      })
+    }
+  }
+
+  public async update({ request, params, response }: HttpContextContract) {
+    const { commune: data } = await request.validate({ schema: UpdateCreateSchema })
+
+    const communeModel = await Commune.findOrFail(params?.id)
+
+    communeModel.name = data.name ?? communeModel.name
+    communeModel.region_id = data.idRegion ?? communeModel.region_id
+
+    try {
+      await communeModel.save()
+
+      return response.ok({
+        status: true,
+        message: 'Comuna actualizada correctamente',
+        communeModel: communeModel.serialize(),
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al actualizar Comuna',
+        error,
+      })
+    }
+  }
+
+  public async show({ params, response }: HttpContextContract) {
+    try {
+      const commune = await Commune.findOrFail(params?.id)
+
+      return response.ok({
+        status: true,
+        message: 'Comuna encontrado correctamente',
+        commune: commune.serialize(),
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al obtener Comuna',
+        error,
+      })
+    }
+  }
+
+  public async destroy({ params, response }: HttpContextContract) {
+    const commune = await Commune.findOrFail(params?.id)
+
+    try {
+      await commune.delete()
+
+      return response.ok({
+        status: true,
+        message: 'Comuna eliminada correctamente ',
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al eliminar Comuna',
+        error,
       })
     }
   }

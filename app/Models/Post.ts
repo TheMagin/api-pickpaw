@@ -1,7 +1,13 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
+import PostFilter from './Filters/PostFilter'
+import { compose } from '@ioc:Adonis/Core/Helpers'
 
-export default class Post extends BaseModel {
+export default class Post extends compose(BaseModel, Filterable) {
+  public static $filter = () => PostFilter
+  public serializeExtras = true
+
   @column({ isPrimary: true })
   public id: number
 

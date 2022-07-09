@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import PetBreed from 'App/Models/PetBreed'
-import { CreateSchema } from 'App/Validators/PetBreedValidator'
+import { CreateSchema, UpdateCreateSchema } from 'App/Validators/PetBreedValidator'
 
 export default class PetBreedsController {
   public async store({ request, response }: HttpContextContract) {
@@ -45,6 +45,68 @@ export default class PetBreedsController {
         status: false,
         message: 'Error al listar los Tipos de Razas',
         error: error,
+      })
+    }
+  }
+
+  public async update({ request, params, response }: HttpContextContract) {
+    const { petBreed: data } = await request.validate({ schema: UpdateCreateSchema })
+
+    const petBreedModel = await PetBreed.findOrFail(params?.id)
+
+    petBreedModel.name = data.name ?? petBreedModel.name
+    petBreedModel.pet_type_id = data.idPetType ?? petBreedModel.pet_type_id
+
+    try {
+      await petBreedModel.save()
+
+      return response.ok({
+        status: true,
+        message: 'Raza de la Mascota actualizada correctamente',
+        petBreedModel: petBreedModel.serialize(),
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al actualizar Raza de Mascota',
+        error,
+      })
+    }
+  }
+
+  public async show({ params, response }: HttpContextContract) {
+    try {
+      const petBreed = await PetBreed.findOrFail(params?.id)
+
+      return response.ok({
+        status: true,
+        message: 'Raza de Mascota encontrada correctamente',
+        petBreed: petBreed.serialize(),
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al obtener Raza de Mascota',
+        error,
+      })
+    }
+  }
+
+  public async destroy({ params, response }: HttpContextContract) {
+    const petBreed = await PetBreed.findOrFail(params?.id)
+
+    try {
+      await petBreed.delete()
+
+      return response.ok({
+        status: true,
+        message: 'Raza de Mascota eliminado correctamente ',
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al eliminar Raza de Mascota',
+        error,
       })
     }
   }

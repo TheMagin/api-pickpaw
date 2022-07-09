@@ -6,6 +6,7 @@ import PetFilter from './Filters/PetFilter'
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 export default class Pet extends compose(BaseModel, Filterable) {
   public static $filter = () => PetFilter
+  public serializeExtras = true
 
   @column({ isPrimary: true })
   public id: number
@@ -14,25 +15,25 @@ export default class Pet extends compose(BaseModel, Filterable) {
   public name: string
 
   @attachment({ disk: 's3', preComputeUrl: true })
-  public photo: AttachmentContract
+  public photo?: AttachmentContract
 
   @column()
-  public age: number
+  public age?: number
 
   @column()
-  public gender: string
+  public gender?: string
 
   @column()
-  public additional_information: string
+  public additional_information?: string
 
   @column()
-  public pet_breed: number
+  public pet_breed?: number
 
   @column()
-  public pet_type_id: number
+  public pet_type_id?: number
 
   @column()
-  public user_id: number
+  public user_id?: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

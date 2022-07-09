@@ -7,6 +7,7 @@ import Commune from './Commune'
 
 export default class Region extends compose(BaseModel, Filterable) {
   public static $filter = () => RegionFilter
+  public serializeExtras = true
 
   @column({ isPrimary: true })
   public id: number

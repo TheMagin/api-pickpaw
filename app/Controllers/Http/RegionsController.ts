@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Region from 'App/Models/Region'
-import { CreateSchema } from 'App/Validators/RegionValidator'
+import { CreateSchema, UpdateSchema } from 'App/Validators/RegionValidator'
 
 export default class RegionsController {
   public async store({ request, response }: HttpContextContract) {
@@ -31,13 +31,7 @@ export default class RegionsController {
     const { page = 1, limit = 10, ...filters } = request.qs()
 
     try {
-      const region = await Region.filter(filters)
-        .preload('comune')
-
-        .paginate(page, limit)
-      /*const data = await Database.rawQuery(
-        `WITH t(n) AS (SELECT 1 FROM DUAL UNION ALL SELECT n+1 FROM t WHERE n < 12) SELECT  t.n as "mes", (SELECT COUNT(p."id") as "clientes" FROM PROVEEDOR_SISTEMA p WHERE   TO_CHAR(p."created_at", 'MM') = t.n) as "clientes" FROM t`
-      )*/
+      const region = await Region.filter(filters).preload('comune').paginate(page, limit)
 
       return response.ok({
         status: true,
@@ -50,6 +44,67 @@ export default class RegionsController {
         status: false,
         message: 'Error al listar regiones',
         error: error,
+      })
+    }
+  }
+
+  public async show({ params, response }: HttpContextContract) {
+    try {
+      const region = await Region.findOrFail(params?.id)
+
+      return response.ok({
+        status: true,
+        message: 'Región encontrada correctamente',
+        region: region.serialize(),
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al obtener la Región',
+        error,
+      })
+    }
+  }
+
+  public async update({ request, params, response }: HttpContextContract) {
+    const { region: data } = await request.validate({ schema: UpdateSchema })
+
+    const regionModel = await Region.findOrFail(params?.id)
+
+    regionModel.name = data.name ?? regionModel.name
+
+    try {
+      await regionModel.save()
+
+      return response.ok({
+        status: true,
+        message: 'Región actualizado correctamente',
+        regionModel: regionModel.serialize(),
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al actualizar Región',
+        error,
+      })
+    }
+  }
+
+  public async destroy({ params, response }: HttpContextContract) {
+    const region = await Region.findOrFail(params?.id)
+
+    try {
+      await region.delete()
+
+      return response.ok({
+        status: true,
+        message: 'Región eliminado correctamente ',
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al eliminar Región',
+        error,
       })
     }
   }

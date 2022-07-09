@@ -5,6 +5,7 @@ import { compose } from '@ioc:Adonis/Core/Helpers'
 import PetBreedFilter from './Filters/PetBreedFilter'
 export default class PetBreed extends compose(BaseModel, Filterable) {
   public static $filter = () => PetBreedFilter
+  public serializeExtras = true
 
   @column({ isPrimary: true })
   public id: number

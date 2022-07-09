@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import TypeSocialMedia from 'App/Models/TypeSocialMedia'
-import { CreateSchema } from 'App/Validators/TypeSocialMediaValidator'
+import { CreateSchema, UpdateCreateSchema } from 'App/Validators/TypeSocialMediaValidator'
 
 export default class TypeSocialMediasController {
     public async store({ request, response }: HttpContextContract) {
@@ -45,6 +45,67 @@ export default class TypeSocialMediasController {
                 status: false,
                 message: 'Error al los Tipos de Redes Sociales',
                 error: error,
+            })
+        }
+    }
+
+    public async update({ request, params, response }: HttpContextContract) {
+        const { typeSocialMedia: data } = await request.validate({ schema: UpdateCreateSchema })
+
+        const typeSocialMediaModel = await TypeSocialMedia.findOrFail(params?.id)
+
+        typeSocialMediaModel.name = data.name ?? typeSocialMediaModel.name
+
+        try {
+            await typeSocialMediaModel.save()
+
+            return response.ok({
+                status: true,
+                message: 'Tipo de Red Social actualizado correctamente',
+                typeSocialMediaModel: typeSocialMediaModel.serialize(),
+            })
+        } catch (error) {
+            return response.badRequest({
+                status: false,
+                message: 'Error al actualizar Tipo de Red Social',
+                error,
+            })
+        }
+    }
+
+    public async show({ params, response }: HttpContextContract) {
+        try {
+            const typeSocialMedia = await TypeSocialMedia.findOrFail(params?.id)
+
+            return response.ok({
+                status: true,
+                message: 'Tipo de Red Social encontrado correctamente',
+                typeSocialMedia: typeSocialMedia.serialize(),
+            })
+        } catch (error) {
+            return response.badRequest({
+                status: false,
+                message: 'Error al obtener Tipo de Red Social',
+                error,
+            })
+        }
+    }
+
+    public async destroy({ params, response }: HttpContextContract) {
+        const typeSocialMedia = await TypeSocialMedia.findOrFail(params?.id)
+
+        try {
+            await typeSocialMedia.delete()
+
+            return response.ok({
+                status: true,
+                message: 'Tipo de Red Social eliminado correctamente ',
+            })
+        } catch (error) {
+            return response.badRequest({
+                status: false,
+                message: 'Error al eliminar Tipo de Red Social',
+                error,
             })
         }
     }

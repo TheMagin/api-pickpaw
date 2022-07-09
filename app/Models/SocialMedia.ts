@@ -6,6 +6,7 @@ import SocialMediaFilter from './Filters/SocialMediaFilter'
 
 export default class SocialMedia extends compose(BaseModel, Filterable) {
   public static $filter = () => SocialMediaFilter
+  public serializeExtras = true
 
   @column({ isPrimary: true })
   public id: number
