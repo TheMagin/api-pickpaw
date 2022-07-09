@@ -31,6 +31,7 @@ export const UpdateCreateSchema = schema.create({
     photo: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
     name: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
     phone: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
+
     idRol: schema.number.optional([rules.unsigned()]),
   }),
 })
