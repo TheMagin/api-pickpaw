@@ -6,7 +6,11 @@ export default class LikeFilter extends BaseModelFilter {
   public $query: ModelQueryBuilderContract<typeof Like, Like>
   q(search: string) {
     this.$query.where((builder) => {
-      builder.where('title', 'LIKE', `%${search}%`).orWhere('description', 'LIKE', `%${search}%`)
+      builder.where('user_id', 'LIKE', `%${search}%`)
+      .orWhere('post_id', 'LIKE', `%${search}%`)
+      .orWhere('pet_id', 'LIKE', `%${search}%`)
+      .orWhere('type_post_id', 'LIKE', `%${search}%`)
+      .orWhere('id', 'LIKE', `%${search}%`)
     })
   }
 }

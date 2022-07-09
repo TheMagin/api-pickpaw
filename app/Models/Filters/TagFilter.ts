@@ -7,7 +7,9 @@ export default class TagFilter extends BaseModelFilter {
 
   q(search: string) {
     this.$query.where((builder) => {
-      builder.where('post_id', 'LIKE', `%${search}%`).orWhere('type_tag_id', 'LIKE', `%${search}%`)
+      builder.where('post_id', 'LIKE', `%${search}%`)
+      .orWhere('type_tag_id', 'LIKE', `%${search}%`)
+      .orWhere('id', 'LIKE', `%${search}%`)
     })
   }
 }

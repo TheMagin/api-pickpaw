@@ -73,3 +73,9 @@ Route.resource('/tag', 'TagsController')
 
 //Route post
 Route.resource('/post', 'PostsController')
+
+//Route post
+Route.resource('/type/post', 'TypePostsController')
+
+//Route post
+Route.resource('/like/post', 'LikePostsController')

@@ -7,7 +7,12 @@ export default class UsuarioFilter extends BaseModelFilter {
 
   q(search: string) {
     this.$query.where((builder) => {
-      builder.where('name', 'LIKE', `%${search}%`).orWhere('id', 'LIKE', `%${search}%`)
+      builder.where('name', 'LIKE', `%${search}%`)
+      .orWhere('id', 'LIKE', `%${search}%`)
+      .orWhere('email', 'LIKE', `%${search}%`)
+      .orWhere('last_name', 'LIKE', `%${search}%`)
+      .orWhere('roles_id', 'LIKE', `%${search}%`)
+      .orWhere('phone', 'LIKE', `%${search}%`)
     })
   }
 }

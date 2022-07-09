@@ -7,7 +7,9 @@ export default class PetBreedFilter extends BaseModelFilter {
 
   q(search: string) {
     this.$query.where((builder) => {
-      builder.where('name', 'LIKE', `%${search}%`).orWhere('id', 'LIKE', `%${search}%`)
+      builder.where('name', 'LIKE', `%${search}%`)
+      .orWhere('id', 'LIKE', `%${search}%`)
+      .orWhere('pet_type_id', 'LIKE', `%${search}%`)
     })
   }
 }

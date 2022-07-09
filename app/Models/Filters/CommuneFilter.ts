@@ -7,7 +7,9 @@ export default class CommuneFilter extends BaseModelFilter {
 
   q(search: string) {
     this.$query.where((builder) => {
-      builder.where('name', 'LIKE', `%${search}%`).orWhere('id', 'LIKE', `%${search}%`)
+      builder.where('name', 'LIKE', `%${search}%`)
+      .orWhere('id', 'LIKE', `%${search}%`)
+      .orWhere('region_id', 'LIKE', `%${search}%`)
     })
   }
 }

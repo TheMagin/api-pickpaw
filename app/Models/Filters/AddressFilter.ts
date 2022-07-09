@@ -7,7 +7,11 @@ export default class AddressFilter extends BaseModelFilter {
 
   q(search: string) {
     this.$query.where((builder) => {
-      builder.where('street', 'LIKE', `%${search}%`).orWhere('id', 'LIKE', `%${search}%`)
+      builder.where('street', 'LIKE', `%${search}%`)
+      .orWhere('id', 'LIKE', `%${search}%`)
+      .orWhere('region_id', 'LIKE', `%${search}%`)
+      .orWhere('commune_id', 'LIKE', `%${search}%`)
+      .orWhere('user_id', 'LIKE', `%${search}%`)
     })
   }
 }

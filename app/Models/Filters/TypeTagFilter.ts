@@ -7,7 +7,8 @@ export default class TypeTagFilter extends BaseModelFilter {
 
   q(search: string) {
     this.$query.where((builder) => {
-      builder.where('name', 'LIKE', `%${search}%`).orWhere('id', 'LIKE', `%${search}%`)
+      builder.where('name', 'LIKE', `%${search}%`)
+      .orWhere('id', 'LIKE', `%${search}%`)
     })
   }
 }

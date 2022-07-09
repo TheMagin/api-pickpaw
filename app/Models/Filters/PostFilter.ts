@@ -7,7 +7,12 @@ export default class PostFilter extends BaseModelFilter {
   
   q(search: string) {
     this.$query.where((builder) => {
-      builder.where('title', 'LIKE', `%${search}%`).orWhere('description', 'LIKE', `%${search}%`)
+      builder.where('title', 'LIKE', `%${search}%`)
+      .orWhere('description', 'LIKE', `%${search}%`)
+      .orWhere('id', 'LIKE', `%${search}%`)
+      .orWhere('user_id', 'LIKE', `%${search}%`)
+      .orWhere('pet_id', 'LIKE', `%${search}%`)
+      .orWhere('type_post_id', 'LIKE', `%${search}%`)
     })
   }
 }

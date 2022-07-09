@@ -7,7 +7,10 @@ export default class SocialMediaFilter extends BaseModelFilter {
 
   q(search: string) {
     this.$query.where((builder) => {
-      builder.where('account', 'LIKE', `%${search}%`).orWhere('id', 'LIKE', `%${search}%`)
+      builder.where('account', 'LIKE', `%${search}%`)
+      .orWhere('id', 'LIKE', `%${search}%`)
+      .orWhere('type_social_media_id', 'LIKE', `%${search}%`)
+      .orWhere('user_id', 'LIKE', `%${search}%`)
     })
   }
 }
