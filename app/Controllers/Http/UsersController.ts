@@ -21,12 +21,11 @@ export default class UsersController {
 
       const user_a = await User.findByOrFail('email', user.email)
 
-      if (user_a.activate == false) {
-        return response.badRequest({
-          status: false,
-          message: 'Debe verificar su cuenta',
-        })
-      }
+      const user_to = await User.findOrFail(user_a.id)
+
+      user_to.remember_me_token = token.token
+
+      user_to.save()
 
       return response.created({
         status: true,
@@ -42,27 +41,20 @@ export default class UsersController {
     }
   }
 
-  public async loginToken({ request, auth, response }: HttpContextContract) {
+  public async loginToken({ request, response }: HttpContextContract) {
     //Call method validate
     const { user } = await request.validate({ schema: LoginTokeSchema })
-    const user_a = await User.findOrFail(user.id)
 
-    const decodedToken: string | null = Encryption.decrypt(user_a.password)
+    const user_a = await User.findByOrFail('id', user.id)
 
-    if (decodedToken) {
-      const isValidToken = await Database.query().from('users').select('password', decodedToken)
-
-      if (!isValidToken.length) throw new Error('')
-    } else {
-      throw new Error('')
-    }
+    const token = user_a.remember_me_token
 
     try {
-      const token = await auth.attempt(user_a.email, decodedToken)
+      //const token = await auth.attempt(user_a.email)
       return response.created({
         status: true,
         message: 'Inició sesión correctamente',
-        token,
+        token: token,
       })
     } catch (error) {
       return response.badRequest({

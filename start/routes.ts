@@ -34,10 +34,7 @@ Route.get('health', async ({ response }) => {
 Route.post('/auth', 'UsersController.login')
 Route.post('/auth/token', 'UsersController.loginToken')
 Route.post('/logout', 'UsersController.logout')
-Route.resource('/user', 'UsersController')
-  .where('id', Route.matchers.number())
-
-  .apiOnly()
+Route.resource('/user', 'UsersController').where('id', Route.matchers.number()).apiOnly()
 Route.post('/new-password-token', 'UsersController.createNewPasswordToken')
 Route.post('/new-user-token', 'UsersController.crateUserToken')
 Route.put('/user/image/:id', 'UsersController.updateImagen')

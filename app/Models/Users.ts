@@ -31,6 +31,9 @@ export default class Users extends compose(BaseModel, Filterable) {
   public roles_id?: number
 
   @column()
+  remember_me_token?: string
+
+  @column()
   public activate?: boolean
 
   @attachment({ disk: 's3', preComputeUrl: true })
