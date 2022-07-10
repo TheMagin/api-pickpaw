@@ -274,8 +274,6 @@ export default class UsersController {
         usuario.password = passwordNew
 
         await usuario.save()
-
-        await Database.query().from('api_tokens').where('token', decodedToken).delete()
       } else {
         throw new Error('')
       }
