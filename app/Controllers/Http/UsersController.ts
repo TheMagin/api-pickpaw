@@ -7,6 +7,7 @@ import {
   LoginSchema,
   createPasswordTokenSchema,
   UpdateCreateSchema,
+  LoginTokeSchema,
 } from 'App/Validators/UserValidator'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
@@ -27,6 +28,37 @@ export default class UsersController {
         })
       }
 
+      return response.created({
+        status: true,
+        message: 'Inició sesión correctamente',
+        token,
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Credenciales incorrectas',
+        error: error,
+      })
+    }
+  }
+
+  public async loginToken({ request, auth, response }: HttpContextContract) {
+    //Call method validate
+    const { user } = await request.validate({ schema: LoginTokeSchema })
+    const user_a = await User.findOrFail(user.id)
+
+    const decodedToken: string | null = Encryption.decrypt(user_a.password)
+
+    if (decodedToken) {
+      const isValidToken = await Database.query().from('users').select('password', decodedToken)
+
+      if (!isValidToken.length) throw new Error('')
+    } else {
+      throw new Error('')
+    }
+
+    try {
+      const token = await auth.attempt(user_a.email, decodedToken)
       return response.created({
         status: true,
         message: 'Inició sesión correctamente',
@@ -75,6 +107,7 @@ export default class UsersController {
 
       const user = await User.findByOrFail('email', userModel.email)
       const token = await auth.use('api').generate(user)
+
       const encrypted = Encryption.encrypt(token.tokenHash)
       //save user
 

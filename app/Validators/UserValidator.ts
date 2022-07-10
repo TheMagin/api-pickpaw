@@ -7,6 +7,12 @@ export const LoginSchema = schema.create({
   }),
 })
 
+export const LoginTokeSchema = schema.create({
+  user: schema.object().members({
+    id: schema.number(),
+  }),
+})
+
 export const CreateSchema = schema.create({
   user: schema.object().members({
     email: schema.string({ trim: true }, [
