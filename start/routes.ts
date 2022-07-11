@@ -86,7 +86,7 @@ Route.get('/google/redirect', async ({ ally }) => {
   return ally.use('google').redirect()
 })
 
-Route.get('/google/callback', async ({ ally, auth }) => {
+Route.get('/google/callback', async ({ ally, auth, response }) => {
   const google = ally.use('google')
   const googleUser = await google.user()
 
@@ -102,4 +102,5 @@ Route.get('/google/callback', async ({ ally, auth }) => {
   )
 
   await auth.use('api').login(user)
+  return response.redirect('https://dev.pickpaw.cl/explorer')
 })
