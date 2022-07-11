@@ -27,7 +27,7 @@ const allyConfig: AllyConfig = {
     driver: 'google',
     clientId: Env.get('GOOGLE_CLIENT_ID'),
     clientSecret: Env.get('GOOGLE_CLIENT_SECRET'),
-    callbackUrl: 'http://api-pickpaw.herokuapp.com/google/callback',
+    callbackUrl: 'https://api-pickpaw.herokuapp.com/google/callback',
   },
 }
 
