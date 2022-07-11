@@ -110,7 +110,7 @@ export default class UsersController {
           .subject('Confirmación de email')
           .htmlView('email_verify', {
             name: `${user.name} ${user.last_name}`,
-            url: `https://dev.pickpaw.cl/register/createprofile?t=${encrypted}&t2=${user.id}`,
+            url: `https://dev.pickpaw.cl/register/createProfile?t=${encrypted}&t2=${user.id}`,
           })
       })
       //Function for Send mail with sengrid
