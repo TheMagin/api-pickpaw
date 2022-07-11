@@ -28,7 +28,8 @@
     "@adonisjs/view",
     "adonis-lucid-filter",
     "@adonisjs/drive-s3",
-    "@adonisjs/attachment-lite"
+    "@adonisjs/attachment-lite",
+    "@adonisjs/ally"
   ],
   "aceProviders": [
     "@adonisjs/repl"

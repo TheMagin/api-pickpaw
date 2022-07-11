@@ -106,7 +106,7 @@ export default class UsersController {
       await Mail.use('sendgrid').send((message) => {
         message
           .from('noreply@pickpaw.cl', 'PickPaw')
-          .to(user.email)
+          .to(data.email)
           .subject('Confirmación de email')
           .htmlView('email_verify', {
             name: `${user.name} ${user.last_name}`,

@@ -20,6 +20,7 @@
 
 import HealthCheck from '@ioc:Adonis/Core/HealthCheck'
 import Route from '@ioc:Adonis/Core/Route'
+import Users from 'App/Models/Users'
 
 Route.get('/', async () => {
   return { api: 'Dinimalist' }
@@ -80,3 +81,37 @@ Route.resource('/type/post', 'TypePostsController')
 
 //Route post
 Route.resource('/like/post', 'LikePostsController')
+
+Route.get('/google/redirect', async ({ ally }) => {
+  return ally.use('google').redirect()
+})
+
+Route.get('/google/callback', async ({ ally, auth }) => {
+  const google = ally.use('google')
+
+  /**
+   * Managing error states here
+   */
+
+  const googleUser = await google.user()
+
+  /**
+   * Find the user by email or create
+   * a new one
+   */
+  const user = await Users.firstOrCreate(
+    {
+      email: googleUser.email,
+    },
+    {
+      name: googleUser.name,
+      remember_me_token: googleUser.token.token,
+      last_name: googleUser.original.family_name,
+    }
+  )
+
+  /**
+   * Login user using the web guard
+   */
+  await auth.use('api').login(user)
+})

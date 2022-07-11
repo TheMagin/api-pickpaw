@@ -16,7 +16,7 @@ export default class Users extends compose(BaseModel, Filterable) {
   public password: string
 
   @column()
-  public email: string
+  public email: string | null
 
   @column()
   public last_name?: string
