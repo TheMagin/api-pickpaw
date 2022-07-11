@@ -89,7 +89,7 @@ Route.get('/google/redirect', async ({ ally }) => {
 Route.get('/google/callback', async ({ ally, auth, response }) => {
   const google = ally.use('google')
   const googleUser = await google.user()
-  const token = googleUser.token.token
+  //const token = googleUser.token.token
   try {
     const user = await Users.firstOrCreate(
       {
