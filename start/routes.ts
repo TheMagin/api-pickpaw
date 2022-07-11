@@ -90,17 +90,26 @@ Route.get('/google/callback', async ({ ally, auth, response }) => {
   const google = ally.use('google')
   const googleUser = await google.user()
 
-  const user = await Users.firstOrCreate(
-    {
-      email: googleUser.email,
-    },
-    {
-      name: googleUser.name,
-      remember_me_token: googleUser.token.token,
-      last_name: googleUser.original.family_name,
-    }
-  )
+  try {
+    const user = await Users.firstOrCreate(
+      {
+        email: googleUser.email,
+      },
+      {
+        name: googleUser.name,
+        remember_me_token: googleUser.token.token,
+        last_name: googleUser.original.family_name,
+      }
+    )
 
-  await auth.use('api').login(user)
-  return response.redirect('https://dev.pickpaw.cl/explorer')
+    await auth.use('api').login(user)
+    return (
+      response.redirect('https://dev.pickpaw.cl/explorer'),
+      response.ok({
+        remember_me_token: googleUser.token.token,
+      })
+    )
+  } catch (error) {
+    return response.badRequest({ status: false })
+  }
 })
