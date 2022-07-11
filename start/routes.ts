@@ -82,29 +82,6 @@ Route.resource('/type/post', 'TypePostsController')
 //Route post
 Route.resource('/like/post', 'LikePostsController')
 
-Route.get('/google/redirect', async ({ ally }) => {
-  return ally.use('google').redirect()
-})
+Route.get('/google/redirect', 'AuthSocialsController.redirect')
 
-Route.get('/google/callback', async ({ ally, auth, response }) => {
-  const google = ally.use('google')
-  const googleUser = await google.user()
-  //const token = googleUser.token.token
-  try {
-    const user = await Users.firstOrCreate(
-      {
-        email: googleUser.email,
-      },
-      {
-        name: googleUser.name,
-        remember_me_token: googleUser.token.token,
-        last_name: googleUser.original.family_name,
-      }
-    )
-
-    await auth.use('api').login(user)
-    //return response.redirect(`https://dev.pickpaw.cl/explorer?t=${token}`)
-  } catch (error) {
-    return response.badRequest({ status: false })
-  }
-})
+Route.get('/google/callback', 'AuthSocialsController.call')
