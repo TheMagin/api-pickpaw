@@ -88,17 +88,8 @@ Route.get('/google/redirect', async ({ ally }) => {
 
 Route.get('/google/callback', async ({ ally, auth }) => {
   const google = ally.use('google')
-
-  /**
-   * Managing error states here
-   */
-
   const googleUser = await google.user()
 
-  /**
-   * Find the user by email or create
-   * a new one
-   */
   const user = await Users.firstOrCreate(
     {
       email: googleUser.email,
@@ -110,8 +101,5 @@ Route.get('/google/callback', async ({ ally, auth }) => {
     }
   )
 
-  /**
-   * Login user using the web guard
-   */
   await auth.use('api').login(user)
 })
