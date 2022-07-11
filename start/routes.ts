@@ -20,7 +20,6 @@
 
 import HealthCheck from '@ioc:Adonis/Core/HealthCheck'
 import Route from '@ioc:Adonis/Core/Route'
-import Users from 'App/Models/Users'
 
 Route.get('/', async () => {
   return { api: 'Dinimalist' }
