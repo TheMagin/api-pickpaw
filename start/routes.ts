@@ -103,7 +103,7 @@ Route.get('/google/callback', async ({ ally, auth, response }) => {
     )
 
     await auth.use('api').login(user)
-    return response.redirect(`https://dev.pickpaw.cl/explorer?t=${token}`)
+    //return response.redirect(`https://dev.pickpaw.cl/explorer?t=${token}`)
   } catch (error) {
     return response.badRequest({ status: false })
   }
