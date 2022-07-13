@@ -27,12 +27,12 @@ export default class UsersController {
 
       user_to.save()
 
-      if (user_a.activate == true) {
+      if (user_a.activate == false) {
         return response.badRequest({
           status: false,
           message: 'Tiene que validar',
         })
-      } else if (user_a.activate == false) {
+      } else if (user_a.activate == true) {
         return response.created({
           status: true,
           message: 'Inició sesión correctamente',
