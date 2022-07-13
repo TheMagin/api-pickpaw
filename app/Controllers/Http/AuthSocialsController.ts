@@ -19,7 +19,7 @@ export default class AuthSocialsController {
           name: googleUser.name,
           remember_me_token: googleUser.token.token,
           last_name: googleUser.original.family_name,
-          activate: true,
+          activate: false,
         }
       )
 
@@ -27,11 +27,7 @@ export default class AuthSocialsController {
 
       const userModel = await Users.findByOrFail('email', user.email)
 
-      if (userModel.activate == false) {
-        return response.redirect(`https://dev.pickpaw.cl/register/createProfile?t=${token}`)
-      } else if (userModel.activate == true) {
-        return response.redirect(`https://dev.pickpaw.cl/explorer?t=${token}`)
-      }
+      return response.redirect(`https://dev.pickpaw.cl/explorer?t=${token}`)
     } catch (error) {
       return response.badRequest({ status: false })
     }
