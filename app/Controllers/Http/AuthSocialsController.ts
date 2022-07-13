@@ -27,9 +27,9 @@ export default class AuthSocialsController {
 
       const userModel = await Users.findByOrFail('email', user.email)
 
-      if (userModel.activate == true) {
+      if (userModel.activate == false) {
         return response.redirect(`https://dev.pickpaw.cl/register/createProfile?t=${token}`)
-      } else {
+      } else if (userModel.activate == true) {
         return response.redirect(`https://dev.pickpaw.cl/explorer?t=${token}`)
       }
     } catch (error) {
