@@ -140,9 +140,9 @@ export default class UsersController {
 
   //Function GET id
   public async show({ params, response, auth, bouncer }: HttpContextContract) {
-    /*await bouncer
+    await bouncer
       .with('RolPolicy')
-      .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])*/
+      .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
     try {
       const user = await User.findOrFail(params.id === 0 ? auth.user?.id : params?.id)
 
