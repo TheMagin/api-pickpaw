@@ -88,6 +88,9 @@ export default class UsersController {
 
   //Function CREATE Default
   public async store({ request, response, auth }: HttpContextContract) {
+    /*await bouncer
+    .with('RolesPolicy')
+    .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])*/
     //Call method validate
     const { user: data } = await request.validate({ schema: CreateSchema })
 
@@ -136,9 +139,14 @@ export default class UsersController {
   }
 
   //Function GET id
-  public async show({ params, response, auth }: HttpContextContract) {
+  public async show({ params, response, auth, bouncer }: HttpContextContract) {
+    /*await bouncer
+      .with('RolPolicy')
+      .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])*/
     try {
       const user = await User.findOrFail(params.id === 0 ? auth.user?.id : params?.id)
+
+      await bouncer.with('UserPolicy').authorize('isOwner', user)
 
       return response.ok({
         status: true,
