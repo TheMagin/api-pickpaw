@@ -25,7 +25,7 @@ export default class AuthSocialsController {
 
       await auth.use('api').login(user)
 
-      const userModel = await Users.findByOrFail('email', user.email)
+      //const userModel = await Users.findByOrFail('email', user.email)
 
       return response.redirect(`https://dev.pickpaw.cl/explorer?t=${token}`)
     } catch (error) {
