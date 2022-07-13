@@ -146,8 +146,6 @@ export default class UsersController {
     try {
       const user = await User.findOrFail(params.id === 0 ? auth.user?.id : params?.id)
 
-      await bouncer.with('UserPolicy').authorize('isOwner', user)
-
       return response.ok({
         status: true,
         message: 'Usuario encontrado correctamente',
