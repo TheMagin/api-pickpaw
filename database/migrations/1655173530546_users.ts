@@ -13,7 +13,7 @@ export default class UsersSchema extends BaseSchema {
       table.boolean('activate').nullable()
       table.string('photo').nullable()
       table.string('name').nullable()
-      table.string('phone').nullable()
+      table.integer('phone').nullable()
       table.string('last_name').nullable()
 
       /**

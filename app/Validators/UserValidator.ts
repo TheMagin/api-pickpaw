@@ -24,7 +24,7 @@ export const CreateSchema = schema.create({
 
     photo: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
     name: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
-    phone: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
+    phone: schema.number.optional(),
     idRol: schema.number.optional([rules.unsigned()]),
   }),
 })
@@ -36,8 +36,7 @@ export const UpdateCreateSchema = schema.create({
     password: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
     photo: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
     name: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
-    phone: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
-
+    phone: schema.number.optional(),
     idRol: schema.number.optional([rules.unsigned()]),
   }),
 })

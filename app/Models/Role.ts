@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import RoleFilter from './Filters/RoleFilter'
+import Users from './Users'
 
 export default class Role extends compose(BaseModel, Filterable) {
   public static $filter = () => RoleFilter
@@ -19,4 +20,7 @@ export default class Role extends compose(BaseModel, Filterable) {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @hasMany(() => Users, { foreignKey: 'roles_id' })
+  public users: HasMany<typeof Users>
 }

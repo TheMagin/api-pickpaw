@@ -36,7 +36,8 @@
       "adonis-lucid-filter",
       "@adonisjs/drive-s3",
       "@adonisjs/attachment-lite",
-      "@adonisjs/ally"
+      "@adonisjs/ally",
+      "@adonisjs/bouncer"
     ]
   }
 }

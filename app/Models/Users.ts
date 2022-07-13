@@ -1,10 +1,11 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeSave, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
 import UsersFilter from './Filters/UserFilter'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
+import Role from './Role'
 export default class Users extends compose(BaseModel, Filterable) {
   public static $filter = () => UsersFilter
   public serializeExtras = true
@@ -40,10 +41,13 @@ export default class Users extends compose(BaseModel, Filterable) {
   public photo?: AttachmentContract
 
   @column()
-  public phone?: string
+  public phone?: number
 
   @column()
   public name?: string
+
+  @belongsTo(() => Role, { foreignKey: 'roles_id' })
+  public rol: BelongsTo<typeof Role>
 
   @beforeSave()
   public static async hashPassword(user: Users) {
