@@ -17,23 +17,21 @@ export default class AuthSocialsController {
         },
         {
           name: googleUser.name,
-          remember_me_token: googleUser.token.token,
+
           last_name: googleUser.original.family_name,
           activate: false,
         }
       )
-      const token = await auth.authenticate()
+      const token = await auth.use('api').authenticate()
 
-      console.log(token.remember_me_token)
-
-      await auth.use('api').login(user)
+      const token2 = await auth.use('api').login(user)
 
       //const userModel = await Users.findByOrFail('email', user.email)
 
       return response.created({
         status: true,
         message: 'Inició sesión correctamente',
-        token: token.remember_me_token,
+        token: token2.token,
       })
     } catch (error) {
       return response.badRequest({ status: false })
