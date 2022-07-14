@@ -143,6 +143,7 @@ export default class UsersController {
     await bouncer
       .with('RolPolicy')
       .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+
     try {
       const user = await User.findOrFail(params.id === 0 ? auth.user?.id : params?.id)
 
