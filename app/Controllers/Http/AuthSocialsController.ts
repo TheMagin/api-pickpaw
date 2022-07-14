@@ -9,7 +9,7 @@ export default class AuthSocialsController {
   public async call({ ally, auth, response }: HttpContextContract) {
     const google = ally.use('google')
     const googleUser = await google.user()
-    //const token = googleUser.token.token
+
     try {
       const user = await Users.firstOrCreate(
         {
@@ -17,21 +17,18 @@ export default class AuthSocialsController {
         },
         {
           name: googleUser.name,
-
+          remember_me_token: googleUser.token.token,
           last_name: googleUser.original.family_name,
           activate: false,
         }
       )
 
-      const token2 = await auth.use('api').login(user)
+      await auth.use('api').login(user)
 
+      const token = await auth.use('api').login(user)
       //const userModel = await Users.findByOrFail('email', user.email)
 
-      return response.created({
-        status: true,
-        message: 'Inició sesión correctamente',
-        token: token2.token,
-      })
+      return response.redirect(`https://dev.pickpaw.cl/explorer?t=${token.token}`)
     } catch (error) {
       return response.badRequest({ status: false })
     }
