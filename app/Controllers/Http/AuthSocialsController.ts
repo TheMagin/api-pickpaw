@@ -22,7 +22,6 @@ export default class AuthSocialsController {
           activate: false,
         }
       )
-      const token = await auth.use('api').authenticate()
 
       const token2 = await auth.use('api').login(user)
 
