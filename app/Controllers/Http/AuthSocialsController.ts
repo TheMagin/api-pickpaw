@@ -17,7 +17,7 @@ export default class AuthSocialsController {
         },
         {
           name: googleUser.name,
-          remember_me_token: googleUser.token.token,
+          remember_me_token: googleUser.token.t,
           last_name: googleUser.original.family_name,
           activate: false,
         }
@@ -25,7 +25,10 @@ export default class AuthSocialsController {
 
       await auth.use('api').login(user)
 
+      const token = await auth.use('api').login(user)
       //const userModel = await Users.findByOrFail('email', user.email)
+
+      return response.redirect(`https://dev.pickpaw.cl/explorer?t=${token.token}`)
     } catch (error) {
       return response.badRequest({ status: false })
     }
