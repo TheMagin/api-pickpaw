@@ -87,7 +87,7 @@ export default class UsersController {
   }
 
   //Function CREATE Default
-  public async store({ request, response, auth }: HttpContextContract) {
+  public async createUser({ request, response, auth }: HttpContextContract) {
     /*await bouncer
     .with('RolesPolicy')
     .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])*/
