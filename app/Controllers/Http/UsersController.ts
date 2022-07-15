@@ -76,7 +76,11 @@ export default class UsersController {
     try {
       await auth.use('api').revoke()
 
-      return response.ok({ status: true, message: 'Ha cerrado sesión correctamente' })
+      return response.ok({
+        status: true,
+        message: 'Ha cerrado sesión correctamente',
+        auth: auth.user?.id,
+      })
     } catch (error) {
       return response.badRequest({
         status: false,
