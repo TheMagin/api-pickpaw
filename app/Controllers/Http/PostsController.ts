@@ -3,7 +3,7 @@ import Post from 'App/Models/Post'
 import { CreateSchema, UpdateCreateSchema } from 'App/Validators/PostValidator'
 
 export default class PostsController {
-  public async store({ request, response }: HttpContextContract) {
+  public async createPost({ request, response }: HttpContextContract) {
     const { post: data } = await request.validate({ schema: CreateSchema })
 
     const postModel = new Post()
@@ -34,7 +34,11 @@ export default class PostsController {
     }
   }
 
-  public async index({ request, response }: HttpContextContract) {
+  public async index({ request, response, bouncer }: HttpContextContract) {
+    await bouncer
+      .with('RolPolicy')
+      .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+      
     const { page = 1, limit = 10, ...filters } = request.qs()
 
     try {
@@ -86,7 +90,11 @@ export default class PostsController {
     }
   }
 
-  public async show({ params, response }: HttpContextContract) {
+  public async show({ params, response, bouncer }: HttpContextContract) {
+    await bouncer
+      .with('RolPolicy')
+      .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+      
     try {
       const post = await Post.findOrFail(params?.id)
 

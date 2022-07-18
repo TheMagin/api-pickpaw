@@ -1,9 +1,9 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Commune from 'App/Models/Commune'
-import { CreateSchema, UpdateCreateSchema } from 'App/Validators/CommuneValidator'
+//import { CreateSchema, UpdateCreateSchema } from 'App/Validators/CommuneValidator'
 
 export default class CommunesController {
-  public async store({ request, response }: HttpContextContract) {
+  /* public async store({ request, response }: HttpContextContract) {
     const { commune: data } = await request.validate({ schema: CreateSchema })
 
     const communeModel = new Commune()
@@ -26,9 +26,13 @@ export default class CommunesController {
         error: error,
       })
     }
-  }
+  } */
 
-  public async index({ request, response }: HttpContextContract) {
+  public async index({ request, response, bouncer }: HttpContextContract) {
+    await bouncer
+      .with('RolPolicy')
+      .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+
     const { page = 1, limit = 10, ...filters } = request.qs()
 
     try {
@@ -49,7 +53,29 @@ export default class CommunesController {
     }
   }
 
-  public async update({ request, params, response }: HttpContextContract) {
+  public async show({ params, response, bouncer }: HttpContextContract) {
+    await bouncer
+      .with('RolPolicy')
+      .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+      
+    try {
+      const commune = await Commune.findOrFail(params?.id)
+
+      return response.ok({
+        status: true,
+        message: 'Comuna encontrado correctamente',
+        commune: commune.serialize(),
+      })
+    } catch (error) {
+      return response.badRequest({
+        status: false,
+        message: 'Error al obtener Comuna',
+        error,
+      })
+    }
+  }
+
+  /* public async update({ request, params, response }: HttpContextContract) {
     const { commune: data } = await request.validate({ schema: UpdateCreateSchema })
 
     const communeModel = await Commune.findOrFail(params?.id)
@@ -72,27 +98,9 @@ export default class CommunesController {
         error,
       })
     }
-  }
+  } */
 
-  public async show({ params, response }: HttpContextContract) {
-    try {
-      const commune = await Commune.findOrFail(params?.id)
-
-      return response.ok({
-        status: true,
-        message: 'Comuna encontrado correctamente',
-        commune: commune.serialize(),
-      })
-    } catch (error) {
-      return response.badRequest({
-        status: false,
-        message: 'Error al obtener Comuna',
-        error,
-      })
-    }
-  }
-
-  public async destroy({ params, response }: HttpContextContract) {
+  /* public async destroy({ params, response }: HttpContextContract) {
     const commune = await Commune.findOrFail(params?.id)
 
     try {
@@ -109,5 +117,5 @@ export default class CommunesController {
         error,
       })
     }
-  }
+  } */
 }

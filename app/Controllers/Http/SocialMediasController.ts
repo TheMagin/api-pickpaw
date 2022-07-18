@@ -4,7 +4,7 @@ import { CreateSchema } from 'App/Validators/SocialMediaValidator'
 import { UpdateCreateSchema } from 'App/Validators/SocialMediaValidator'
 
 export default class SocialMediasController {
-  public async store({ request, response }: HttpContextContract) {
+  public async createSocialMedia({ request, response }: HttpContextContract) {
     const { socialMedia: data } = await request.validate({ schema: CreateSchema })
 
     const socialMediaModel = new SocialMedia()
@@ -30,7 +30,11 @@ export default class SocialMediasController {
     }
   }
 
-  public async index({ request, response }: HttpContextContract) {
+  public async index({ request, response, bouncer }: HttpContextContract) {
+    await bouncer
+      .with('RolPolicy')
+      .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+      
     const { page = 1, limit = 10, ...filters } = request.qs()
 
     try {
@@ -77,7 +81,11 @@ export default class SocialMediasController {
     }
   }
 
-  public async show({ params, response }: HttpContextContract) {
+  public async show({ params, response, bouncer }: HttpContextContract) {
+    await bouncer
+      .with('RolPolicy')
+      .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+      
     try {
       const socialMedia = await SocialMedia.findOrFail(params?.id)
 

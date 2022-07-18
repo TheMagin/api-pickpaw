@@ -1,9 +1,9 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Region from 'App/Models/Region'
-import { CreateSchema, UpdateSchema } from 'App/Validators/RegionValidator'
+//import { CreateSchema, UpdateSchema } from 'App/Validators/RegionValidator'
 
 export default class RegionsController {
-  public async store({ request, response }: HttpContextContract) {
+  /* public async store({ request, response }: HttpContextContract) {
     const { region: data } = await request.validate({ schema: CreateSchema })
 
     const regionModel = new Region()
@@ -25,9 +25,13 @@ export default class RegionsController {
         error: error,
       })
     }
-  }
+  } */
 
-  public async index({ request, response }: HttpContextContract) {
+  public async index({ request, response, bouncer }: HttpContextContract) {
+    await bouncer
+      .with('RolPolicy')
+      .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+      
     const { page = 1, limit = 10, ...filters } = request.qs()
 
     try {
@@ -48,7 +52,11 @@ export default class RegionsController {
     }
   }
 
-  public async show({ params, response }: HttpContextContract) {
+  public async show({ params, response, bouncer }: HttpContextContract) {
+    await bouncer
+      .with('RolPolicy')
+      .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+      
     try {
       const region = await Region.findOrFail(params?.id)
 
@@ -66,7 +74,7 @@ export default class RegionsController {
     }
   }
 
-  public async update({ request, params, response }: HttpContextContract) {
+  /* public async update({ request, params, response }: HttpContextContract) {
     const { region: data } = await request.validate({ schema: UpdateSchema })
 
     const regionModel = await Region.findOrFail(params?.id)
@@ -107,5 +115,5 @@ export default class RegionsController {
         error,
       })
     }
-  }
+  } */
 }

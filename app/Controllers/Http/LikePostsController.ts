@@ -1,9 +1,9 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import LikePost from 'App/Models/LikePost'
-import { CreateSchema, UpdateCreateSchema } from 'App/Validators/LikePostValidator'
+//import { CreateSchema, UpdateCreateSchema } from 'App/Validators/LikePostValidator'
 
 export default class LikePostsController {
-    public async store({ request, response }: HttpContextContract) {
+    /* public async store({ request, response }: HttpContextContract) {
         const { likePost: data } = await request.validate({ schema: CreateSchema })
 
         const likePostModel = new LikePost()
@@ -28,9 +28,13 @@ export default class LikePostsController {
                 error: error,
             })
         }
-    }
+    } */
 
-    public async index({ request, response }: HttpContextContract) {
+    public async index({ request, response, bouncer }: HttpContextContract) {
+        await bouncer
+            .with('RolPolicy')
+            .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+
         const { page = 1, limit = 10, ...filters } = request.qs()
 
         try {
@@ -51,7 +55,29 @@ export default class LikePostsController {
         }
     }
 
-    public async update({ request, params, response }: HttpContextContract) {
+    public async show({ params, response, bouncer }: HttpContextContract) {
+        await bouncer
+            .with('RolPolicy')
+            .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+
+        try {
+            const likePost = await LikePost.findOrFail(params?.id)
+
+            return response.ok({
+                status: true,
+                message: 'Me Gusta del Post encontrado correctamente',
+                likePost: likePost.serialize(),
+            })
+        } catch (error) {
+            return response.badRequest({
+                status: false,
+                message: 'Error al obtener Me Gusta del Post',
+                error,
+            })
+        }
+    }
+
+    /* public async update({ request, params, response }: HttpContextContract) {
         const { likePost: data } = await request.validate({ schema: UpdateCreateSchema })
 
         const likePostModel = await LikePost.findOrFail(params?.id)
@@ -78,24 +104,6 @@ export default class LikePostsController {
         }
     }
 
-    public async show({ params, response }: HttpContextContract) {
-        try {
-            const likePost = await LikePost.findOrFail(params?.id)
-
-            return response.ok({
-                status: true,
-                message: 'Me Gusta del Post encontrado correctamente',
-                likePost: likePost.serialize(),
-            })
-        } catch (error) {
-            return response.badRequest({
-                status: false,
-                message: 'Error al obtener Me Gusta del Post',
-                error,
-            })
-        }
-    }
-
     public async destroy({ params, response }: HttpContextContract) {
         const likePost = await LikePost.findOrFail(params?.id)
 
@@ -113,5 +121,5 @@ export default class LikePostsController {
                 error,
             })
         }
-    }
+    } */
 }

@@ -1,9 +1,9 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import TypeTag from 'App/Models/TypeTag'
-import { CreateSchema, UpdateCreateSchema } from 'App/Validators/TypeTagValidator'
+//import { CreateSchema, UpdateCreateSchema } from 'App/Validators/TypeTagValidator'
 
 export default class TypeTagsController {
-    public async store({ request, response }: HttpContextContract) {
+    /* public async store({ request, response }: HttpContextContract) {
         const { typeTag: data } = await request.validate({ schema: CreateSchema })
 
         const typeTagModel = new TypeTag()
@@ -25,9 +25,13 @@ export default class TypeTagsController {
                 error: error,
             })
         }
-    }
+    } */
 
-    public async index({ request, response }: HttpContextContract) {
+    public async index({ request, response, bouncer }: HttpContextContract) {
+        await bouncer
+            .with('RolPolicy')
+            .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+            
         const { page = 1, limit = 10, ...filters } = request.qs()
 
         try {
@@ -48,7 +52,7 @@ export default class TypeTagsController {
         }
     }
 
-    public async update({ request, params, response }: HttpContextContract) {
+    /* public async update({ request, params, response }: HttpContextContract) {
         const { typeTag: data } = await request.validate({ schema: UpdateCreateSchema })
 
         const typeTagModel = await TypeTag.findOrFail(params?.id)
@@ -70,9 +74,13 @@ export default class TypeTagsController {
                 error,
             })
         }
-    }
+    } */
 
-    public async show({ params, response }: HttpContextContract) {
+    public async show({ params, response, bouncer }: HttpContextContract) {
+        await bouncer
+            .with('RolPolicy')
+            .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+            
         try {
             const typeTag = await TypeTag.findOrFail(params?.id)
 
@@ -90,7 +98,7 @@ export default class TypeTagsController {
         }
     }
 
-    public async destroy({ params, response }: HttpContextContract) {
+    /* public async destroy({ params, response }: HttpContextContract) {
         const typeTag = await TypeTag.findOrFail(params?.id)
 
         try {
@@ -107,5 +115,5 @@ export default class TypeTagsController {
                 error,
             })
         }
-    }
+    } */
 }

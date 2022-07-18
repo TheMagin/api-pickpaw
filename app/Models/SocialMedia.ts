@@ -1,8 +1,10 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, belongsTo, BelongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import SocialMediaFilter from './Filters/SocialMediaFilter'
+import Users from './Users'
+import TypeSocialMedia from './TypeSocialMedia'
 
 export default class SocialMedia extends compose(BaseModel, Filterable) {
   public static $filter = () => SocialMediaFilter
@@ -25,4 +27,10 @@ export default class SocialMedia extends compose(BaseModel, Filterable) {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @belongsTo(() => TypeSocialMedia, { foreignKey: 'type_social_media_id' })
+  public typeSocialMedia: BelongsTo<typeof TypeSocialMedia>
+
+  @belongsTo(() => Users, { foreignKey: 'user_id' })
+  public user: BelongsTo<typeof Users>
 }

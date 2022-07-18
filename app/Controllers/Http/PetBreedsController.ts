@@ -1,9 +1,9 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import PetBreed from 'App/Models/PetBreed'
-import { CreateSchema, UpdateCreateSchema } from 'App/Validators/PetBreedValidator'
+//import { CreateSchema, UpdateCreateSchema } from 'App/Validators/PetBreedValidator'
 
 export default class PetBreedsController {
-  public async store({ request, response }: HttpContextContract) {
+  /* public async store({ request, response }: HttpContextContract) {
     const { petBreed: data } = await request.validate({ schema: CreateSchema })
 
     const petBreedModel = new PetBreed()
@@ -26,9 +26,13 @@ export default class PetBreedsController {
         error: error,
       })
     }
-  }
+  } */
 
-  public async index({ request, response }: HttpContextContract) {
+  public async index({ request, response, bouncer }: HttpContextContract) {
+    await bouncer
+      .with('RolPolicy')
+      .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+      
     const { page = 1, limit = 10, ...filters } = request.qs()
 
     try {
@@ -49,7 +53,7 @@ export default class PetBreedsController {
     }
   }
 
-  public async update({ request, params, response }: HttpContextContract) {
+  /* public async update({ request, params, response }: HttpContextContract) {
     const { petBreed: data } = await request.validate({ schema: UpdateCreateSchema })
 
     const petBreedModel = await PetBreed.findOrFail(params?.id)
@@ -72,9 +76,13 @@ export default class PetBreedsController {
         error,
       })
     }
-  }
+  } */
 
-  public async show({ params, response }: HttpContextContract) {
+  public async show({ params, response, bouncer }: HttpContextContract) {
+    await bouncer
+      .with('RolPolicy')
+      .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+      
     try {
       const petBreed = await PetBreed.findOrFail(params?.id)
 
@@ -92,7 +100,7 @@ export default class PetBreedsController {
     }
   }
 
-  public async destroy({ params, response }: HttpContextContract) {
+  /* public async destroy({ params, response }: HttpContextContract) {
     const petBreed = await PetBreed.findOrFail(params?.id)
 
     try {
@@ -109,5 +117,5 @@ export default class PetBreedsController {
         error,
       })
     }
-  }
+  } */
 }

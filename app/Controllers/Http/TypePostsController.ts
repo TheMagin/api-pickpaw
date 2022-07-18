@@ -1,9 +1,9 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import TypePost from 'App/Models/TypePost'
-import { CreateSchema, UpdateCreateSchema } from 'App/Validators/TypePostValidator'
+//import { CreateSchema, UpdateCreateSchema } from 'App/Validators/TypePostValidator'
 
 export default class TypePostsController {
-    public async store({ request, response }: HttpContextContract) {
+    /* public async store({ request, response }: HttpContextContract) {
         const { typePost: data } = await request.validate({ schema: CreateSchema })
 
         const typePostModel = new TypePost()
@@ -25,9 +25,13 @@ export default class TypePostsController {
                 error: error,
             })
         }
-    }
+    } */
 
-    public async index({ request, response }: HttpContextContract) {
+    public async index({ request, response, bouncer }: HttpContextContract) {
+        await bouncer
+            .with('RolPolicy')
+            .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+
         const { page = 1, limit = 10, ...filters } = request.qs()
 
         try {
@@ -48,7 +52,7 @@ export default class TypePostsController {
         }
     }
 
-    public async update({ request, params, response }: HttpContextContract) {
+    /* public async update({ request, params, response }: HttpContextContract) {
         const { typePost: data } = await request.validate({ schema: UpdateCreateSchema })
 
         const typePostModel = await TypePost.findOrFail(params?.id)
@@ -70,9 +74,13 @@ export default class TypePostsController {
                 error,
             })
         }
-    }
+    } */
 
-    public async show({ params, response }: HttpContextContract) {
+    public async show({ params, response, bouncer }: HttpContextContract) {
+        await bouncer
+            .with('RolPolicy')
+            .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+
         try {
             const typePost = await TypePost.findOrFail(params?.id)
 
@@ -90,7 +98,7 @@ export default class TypePostsController {
         }
     }
 
-    public async destroy({ params, response }: HttpContextContract) {
+    /* public async destroy({ params, response }: HttpContextContract) {
         const typePost = await TypePost.findOrFail(params?.id)
 
         try {
@@ -107,5 +115,5 @@ export default class TypePostsController {
                 error,
             })
         }
-    }
+    } */
 }

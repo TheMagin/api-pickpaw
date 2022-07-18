@@ -1,8 +1,10 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, belongsTo, BelongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import TagFilter from './Filters/TagFilter'
+import Post from './Post'
+import TypeTag from './TypeTag'
 
 export default class Tag extends compose(BaseModel, Filterable) {
   public static $filter = () => TagFilter
@@ -22,4 +24,10 @@ export default class Tag extends compose(BaseModel, Filterable) {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @belongsTo(() => Post, { foreignKey: 'post_id' })
+  public post: BelongsTo<typeof Post>
+
+  @belongsTo(() => TypeTag, { foreignKey: 'type_tag_id' })
+  public typeTag: BelongsTo<typeof TypeTag>
 }
