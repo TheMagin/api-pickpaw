@@ -112,10 +112,9 @@ export default class UsersController {
       await userModel.save()
 
       const user = await User.findByOrFail('email', userModel.email)
-      const token = await auth.use('api').generate(user)
 
-      const encrypted = Encryption.encrypt(token.tokenHash)
       //save user
+      const token = await auth.use('api').login(user)
 
       await Mail.use('sendgrid').send((message) => {
         message
@@ -124,7 +123,7 @@ export default class UsersController {
           .subject('Confirmación de email')
           .htmlView('email_verify', {
             name: `${user.name} ${user.last_name}`,
-            url: `https://dev.pickpaw.cl/register/createProfile?t=${encrypted}&t2=${user.id}`,
+            url: `https://dev.pickpaw.cl/register/createProfile?t=${token.token}`,
           })
       })
       //Function for Send mail with sengrid
