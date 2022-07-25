@@ -1,9 +1,9 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Tag from 'App/Models/Tag'
-import { CreateSchema, UpdateCreateSchema } from 'App/Validators/TagValidator'
+//import { CreateSchema, UpdateCreateSchema } from 'App/Validators/TagValidator'
 
 export default class TagsController {
-    public async store({ request, response }: HttpContextContract) {
+    /* public async store({ request, response }: HttpContextContract) {
         const { tag: data } = await request.validate({ schema: CreateSchema })
 
         const tagModel = new Tag()
@@ -26,9 +26,13 @@ export default class TagsController {
                 error: error,
             })
         }
-    }
+    } */
 
-    public async index({ request, response }: HttpContextContract) {
+    public async index({ request, response, bouncer }: HttpContextContract) {
+        await bouncer
+            .with('RolPolicy')
+            .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+
         const { page = 1, limit = 10, ...filters } = request.qs()
 
         try {
@@ -49,7 +53,7 @@ export default class TagsController {
         }
     }
 
-    public async update({ request, params, response }: HttpContextContract) {
+    /* public async update({ request, params, response }: HttpContextContract) {
         const { tag: data } = await request.validate({ schema: UpdateCreateSchema })
 
         const tagModel = await Tag.findOrFail(params?.id)
@@ -72,9 +76,13 @@ export default class TagsController {
                 error,
             })
         }
-    }
+    } */
 
-    public async show({ params, response }: HttpContextContract) {
+    public async show({ params, response, bouncer }: HttpContextContract) {
+        await bouncer
+            .with('RolPolicy')
+            .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+
         try {
             const tag = await Tag.findOrFail(params?.id)
 
@@ -92,7 +100,7 @@ export default class TagsController {
         }
     }
 
-    public async destroy({ params, response }: HttpContextContract) {
+    /* public async destroy({ params, response }: HttpContextContract) {
         const tag = await Tag.findOrFail(params?.id)
 
         try {
@@ -109,5 +117,5 @@ export default class TagsController {
                 error,
             })
         }
-    }
+    } */
 }

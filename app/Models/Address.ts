@@ -1,8 +1,11 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import AddressFilter from './Filters/AddressFilter'
+import Users from './Users'
+import Region from './Region'
+import Commune from './Commune'
 
 export default class Address extends compose(BaseModel, Filterable) {
   public static $filter = () => AddressFilter
@@ -28,4 +31,13 @@ export default class Address extends compose(BaseModel, Filterable) {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @belongsTo(() => Region, { foreignKey: 'region_id' })
+  public region: BelongsTo<typeof Region>
+
+  @belongsTo(() => Commune, { foreignKey: 'commune_id' })
+  public commune: BelongsTo<typeof Commune>
+
+  @belongsTo(() => Users, { foreignKey: 'user_id' })
+  public user: BelongsTo<typeof Users>
 }

@@ -4,7 +4,8 @@ import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { UpdateCreateSchema } from 'App/Validators/PetValidator'
 
 export default class PetsController {
-  public async store({ request, response }: HttpContextContract) {
+  public async createPet({ request, response }: HttpContextContract) {
+
     const petModel = new Pet()
 
     const name = request.input('name')
@@ -22,7 +23,7 @@ export default class PetsController {
       petModel.age = age
       petModel.gender = gender
       petModel.additional_information = additional_information
-      petModel.pet_breed = pet_breed
+      petModel.pet_breed_id = pet_breed
       petModel.pet_type_id = pet_type_id
       petModel.user_id = user_id
 
@@ -42,7 +43,11 @@ export default class PetsController {
     }
   }
 
-  public async index({ request, response }: HttpContextContract) {
+  public async index({ request, response, bouncer }: HttpContextContract) {
+    await bouncer
+      .with('RolPolicy')
+      .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+      
     const { page = 1, limit = 10, ...filters } = request.qs()
 
     try {
@@ -72,7 +77,7 @@ export default class PetsController {
     petModel.age = data.age ?? petModel.age
     petModel.gender = data.gender ?? petModel.gender
     petModel.additional_information = data?.additionInformation ?? petModel.additional_information
-    petModel.pet_breed = petModel.pet_breed ?? petModel.pet_breed
+    petModel.pet_breed_id = petModel.pet_breed_id ?? petModel.pet_breed_id
     petModel.pet_type_id = petModel.pet_type_id ?? petModel.pet_type_id
     petModel.pet_type_id = petModel.pet_type_id ?? petModel.pet_type_id
 
@@ -116,7 +121,11 @@ export default class PetsController {
     }
   }
 
-  public async show({ params, response }: HttpContextContract) {
+  public async show({ params, response, bouncer }: HttpContextContract) {
+    await bouncer
+      .with('RolPolicy')
+      .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+      
     try {
       const pet = await Pet.findOrFail(params?.id)
 

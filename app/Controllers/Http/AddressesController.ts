@@ -3,7 +3,7 @@ import Address from 'App/Models/Address'
 import { CreateSchema, UpdateCreateSchema } from 'App/Validators/AddressValidator'
 
 export default class AddressesController {
-  public async store({ request, response }: HttpContextContract) {
+  public async createAddress({ request, response }: HttpContextContract) {
     const { address: data } = await request.validate({ schema: CreateSchema })
 
     const addressModel = new Address()
@@ -29,7 +29,11 @@ export default class AddressesController {
     }
   }
 
-  public async index({ request, response }: HttpContextContract) {
+  public async index({ request, response, bouncer }: HttpContextContract) {
+    await bouncer
+      .with('RolPolicy')
+      .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+
     const { page = 1, limit = 10, ...filters } = request.qs()
 
     try {
@@ -77,7 +81,11 @@ export default class AddressesController {
     }
   }
 
-  public async show({ params, response }: HttpContextContract) {
+  public async show({ params, response, bouncer }: HttpContextContract) {
+    await bouncer
+      .with('RolPolicy')
+      .authorize('rol', ['Admin', 'Moderador', 'Usuario', 'Veterinario', 'Fundación'])
+      
     try {
       const address = await Address.findOrFail(params?.id)
 

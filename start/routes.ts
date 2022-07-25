@@ -51,7 +51,7 @@ Route.resource('/region', 'RegionsController')
 Route.resource('/commune', 'CommunesController')
 
 //Route address
-Route.resource('/address', 'AddressesController')
+Route.resource('/address', 'AddressesController.createAddress')
 
 //Route petbredd
 Route.resource('/pet/breed', 'PetBreedsController')
@@ -60,10 +60,10 @@ Route.resource('/pet/breed', 'PetBreedsController')
 Route.resource('/pet/type', 'PetTypesController')
 
 //Route pet
-Route.resource('/pet', 'PetsController')
+Route.resource('/pet', 'PetsController.createPet')
 
 //Route social media
-Route.resource('/social/media', 'SocialMediasController')
+Route.resource('/social/media', 'SocialMediasController.createSocialMedia')
 
 //Route type social media
 Route.resource('/type/social/media', 'TypeSocialMediasController')
@@ -78,7 +78,7 @@ Route.resource('/type/tag', 'TypeTagsController')
 Route.resource('/tag', 'TagsController')
 
 //Route post
-Route.resource('/post', 'PostsController')
+Route.resource('/post', 'PostsController.createPost')
 
 //Route post
 Route.resource('/type/post', 'TypePostsController')

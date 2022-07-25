@@ -1,8 +1,11 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { Filterable } from '@ioc:Adonis/Addons/LucidFilter'
 import PostFilter from './Filters/PostFilter'
 import { compose } from '@ioc:Adonis/Core/Helpers'
+import Users from './Users'
+import Pet from './Pet'
+import TypePost from './TypePost'
 
 export default class Post extends compose(BaseModel, Filterable) {
   public static $filter = () => PostFilter
@@ -40,4 +43,13 @@ export default class Post extends compose(BaseModel, Filterable) {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @belongsTo(() => Users, { foreignKey: 'user_id' })
+  public user: BelongsTo<typeof Users>
+
+  @belongsTo(() => Pet, { foreignKey: 'pet_id' })
+  public pet: BelongsTo<typeof Pet>
+
+  @belongsTo(() => TypePost, { foreignKey: 'type_post_id' })
+  public typePost: BelongsTo<typeof TypePost>
 }
