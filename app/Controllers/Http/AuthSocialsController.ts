@@ -28,7 +28,7 @@ export default class AuthSocialsController {
       const token = await auth.use('api').login(user)
       //const userModel = await Users.findByOrFail('email', user.email)
 
-      return response.redirect(`https://dev.pickpaw.cl/explorer?t=${token.token}`)
+      return response.redirect(`https://dev.pickpaw.cl/register/createProfile?t=${token.token}`)
     } catch (error) {
       return response.badRequest({ status: false })
     }
