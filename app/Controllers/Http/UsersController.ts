@@ -238,10 +238,12 @@ export default class UsersController {
   public async updateImagen({ request, response, params }: HttpContextContract) {
     const user = await User.findOrFail(params?.id)
     const photo = request.file('photo', { size: '2mb', extnames: ['jpg', 'png', 'webp'] })
-
-    user.photo = Attachment.fromFile(photo!)
+    const phone = request.input('phone')
 
     try {
+      user.photo = Attachment.fromFile(photo!)
+      user.phone = phone
+
       await user.save()
 
       return response.ok({
