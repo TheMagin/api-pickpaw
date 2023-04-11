@@ -18,74 +18,83 @@
 |
 */
 
-import HealthCheck from '@ioc:Adonis/Core/HealthCheck'
-import Route from '@ioc:Adonis/Core/Route'
+import HealthCheck from "@ioc:Adonis/Core/HealthCheck";
+import Route from "@ioc:Adonis/Core/Route";
 
-Route.get('/', async () => {
-  return { api: 'Dinimalist' }
-})
+Route.get("/", async () => {
+  return { api: "Dinimalist" };
+});
 
-Route.get('health', async ({ response }) => {
-  const report = await HealthCheck.getReport()
+Route.get("health", async ({ response }) => {
+  const report = await HealthCheck.getReport();
 
-  return report.healthy ? response.ok(report) : response.badRequest(report)
-})
+  return report.healthy ? response.ok(report) : response.badRequest(report);
+});
 //Route users
-Route.post('/auth', 'UsersController.login')
-Route.post('/auth/token', 'UsersController.loginToken')
-Route.post('/logout', 'UsersController.logout')
+Route.post("/auth", "UsersController.login");
+Route.post("/auth/token", "UsersController.loginToken");
+Route.post("/logout", "UsersController.logout");
 
-Route.post('/user', 'UsersController.createUser')
-Route.resource('/auth/user', 'UsersController')
-  .where('id', Route.matchers.number())
-  .middleware({ '*': 'auth' })
-  .apiOnly()
-Route.post('/new-password-token', 'UsersController.createNewPasswordToken')
-Route.post('/new-user-token', 'UsersController.crateUserToken')
-Route.put('/user/image/:id', 'UsersController.updateImagen')
+Route.post("/user", "UsersController.createUser");
+Route.resource("/auth/user", "UsersController")
+  .where("id", Route.matchers.number())
+  .middleware({ "*": "auth" })
+  .apiOnly();
+Route.post("/new-password-token", "UsersController.createNewPasswordToken");
+Route.post("/new-user-token", "UsersController.crateUserToken");
+Route.put("/user/image/:id", "UsersController.updateImagen");
 
 //Route region
-Route.resource('/region', 'RegionsController')
+Route.resource("/region", "RegionsController").middleware({ "*": "auth" });
 
 //Route comuna
-Route.resource('/commune', 'CommunesController')
+Route.resource("/commune", "CommunesController").middleware({ "*": "auth" });
 
 //Route address
-Route.resource('/address', 'AddressesController.createAddress')
-
+Route.resource("/address", "AddressesController").middleware({
+  "*": "auth",
+});
 //Route petbredd
-Route.resource('/pet/breed', 'PetBreedsController')
+Route.resource("/pet/breed", "PetBreedsController").middleware({ "*": "auth" });
 
 //Route pet type
-Route.resource('/pet/type', 'PetTypesController')
+Route.resource("/pet/type", "PetTypesController").middleware({ "*": "auth" });
 
 //Route pet
-Route.resource('/pet', 'PetsController.createPet')
+Route.resource("/pet", "PetsController").middleware({ "*": "auth" });
 
 //Route social media
-Route.resource('/social/media', 'SocialMediasController.createSocialMedia')
+Route.resource("/social/media", "SocialMediasController").middleware({
+  "*": "auth",
+});
 
 //Route type social media
-Route.resource('/type/social/media', 'TypeSocialMediasController')
+Route.resource("/type/social/media", "TypeSocialMediasController").middleware({
+  "*": "auth",
+});
 
 //Route post
-Route.resource('/role', 'RolesController')
+Route.resource("/role", "RolesController");
 
 //Route post
-Route.resource('/type/tag', 'TypeTagsController')
+Route.resource("/type/tag", "TypeTagsController").middleware({ "*": "auth" });
 
 //Route post
-Route.resource('/tag', 'TagsController')
+Route.resource("/tag", "TagsController").middleware({ "*": "auth" });
 
 //Route post
-Route.resource('/post', 'PostsController.createPost')
+Route.resource("/post", "PostsController").middleware({
+  "*": "auth",
+});
+
+Route.post("/post/imagen", "PostsController.postImagen");
 
 //Route post
-Route.resource('/type/post', 'TypePostsController')
+Route.resource("/type/post", "TypePostsController").middleware({ "*": "auth" });
 
 //Route post
-Route.resource('/like/post', 'LikePostsController')
+Route.resource("/like/post", "LikePostsController").middleware({ "*": "auth" });
 
-Route.get('/google/redirect', 'AuthSocialsController.redirect')
+Route.get("/google/redirect", "AuthSocialsController.redirect");
 
-Route.get('/google/callback', 'AuthSocialsController.call')
+Route.get("/google/callback", "AuthSocialsController.call");
